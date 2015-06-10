@@ -223,15 +223,41 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             objects.removeAtIndex(indexPath.row)
-            alarmMgr.time.removeAtIndex(indexPath.row)
-            alarmMgr.alarm_scheduler[indexPath.row]!.invalidate()
-            alarmMgr.alarm_scheduler.removeAtIndex(indexPath.row)
-            alarmMgr.traffic_scheduler[indexPath.row]!.invalidate()
-            alarmMgr.traffic_scheduler.removeAtIndex(indexPath.row)
-            alarmMgr.destination.removeAtIndex(indexPath.row)
-            alarmMgr.timeOfArrival.removeAtIndex(indexPath.row)
-            alarmMgr.timeCalculated.removeAtIndex(indexPath.row)
-            alarmMgr.bufferTime.removeAtIndex(indexPath.row)
+
+            if ((alarmMgr.time[indexPath.row]) != nil){
+                alarmMgr.time.removeAtIndex(indexPath.row)
+            }
+            
+            if ((alarmMgr.alarm_scheduler[indexPath.row]) != nil){
+                alarmMgr.alarm_scheduler[indexPath.row]!.invalidate()
+                alarmMgr.alarm_scheduler.removeAtIndex(indexPath.row)
+            }
+           
+            if ((alarmMgr.traffic_scheduler[indexPath.row]) != nil){
+                alarmMgr.traffic_scheduler[indexPath.row]!.invalidate()
+            }
+            
+            if ((alarmMgr.traffic_scheduler[indexPath.row]) != nil){
+                alarmMgr.traffic_scheduler.removeAtIndex(indexPath.row)
+            }
+            
+            if ((alarmMgr.destination[indexPath.row]) != nil){
+                alarmMgr.destination.removeAtIndex(indexPath.row)
+            }
+
+            if ((alarmMgr.timeOfArrival[indexPath.row]) != nil){
+                alarmMgr.timeOfArrival.removeAtIndex(indexPath.row)
+            }
+            
+            
+            if ((alarmMgr.timeCalculated[indexPath.row]) != nil){
+                alarmMgr.timeCalculated.removeAtIndex(indexPath.row)
+            }
+            
+            if ((alarmMgr.bufferTime[indexPath.row]) != nil){
+                alarmMgr.bufferTime.removeAtIndex(indexPath.row)
+            }
+        
             println("Removed alarm");
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {

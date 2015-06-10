@@ -295,15 +295,10 @@ class DetailViewController: UIViewController {
         
         // Date comparision to compare current date and end date.
         var dateComparisionResult:NSComparisonResult = date.compare(alarmMgr.timeCalculated[index]!)
-        
+        println("date is \(date) and time calculated is \(alarmMgr.timeCalculated[index]!)");
         if dateComparisionResult == NSComparisonResult.OrderedDescending
         {
             println("greater than");
-        }
-        else if dateComparisionResult == NSComparisonResult.OrderedAscending
-        {
-            println("less than");
-            println("match");
             alarmMgr.alarm_scheduler[index]!.invalidate()
             alarmMgr.traffic_scheduler[index]!.invalidate()
             
@@ -331,9 +326,9 @@ class DetailViewController: UIViewController {
             uiAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
                 self.audioPlayer.stop()
             }))
-
+            
             var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("who_are_you", ofType: "mp3")!)
-
+            
             // Removed deprecated use of AVAudioSessionDelegate protocol
             AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
             AVAudioSession.sharedInstance().setActive(true, error: nil)
@@ -343,6 +338,12 @@ class DetailViewController: UIViewController {
             audioPlayer.prepareToPlay()
             audioPlayer.numberOfLoops = -1
             audioPlayer.play()
+        }
+        else if dateComparisionResult == NSComparisonResult.OrderedAscending
+        {
+            println("less than");
+            println("match");
+            
 
         }
         else if dateComparisionResult == NSComparisonResult.OrderedSame
