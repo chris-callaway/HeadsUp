@@ -29,6 +29,7 @@ class DetailViewController: UIViewController {
             self.configureView()
         }
     }
+    
 
     func configureView() {
         // Update the user interface for the detail item.
@@ -217,24 +218,44 @@ class DetailViewController: UIViewController {
                                             var secondsChanged = totalTimeWithDelay;
                                             var minutesChanged = (totalTimeWithDelay) % 60;
                                             var hoursChanged = minutesChanged / 60;
+                                            let negativeSeconds = -secondsChanged;
                                             
                                             //Get current time
                                             let date = alarmMgr.timeOfArrival[self.index]!
                                             let calendar = NSCalendar.currentCalendar()
                                             let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
+                                            println("you want to get there at \(date)");
                                             let hour = components.hour - hoursChanged
                                             let minutes = components.minute - minutesChanged
                                             let seconds = components.second - secondsChanged;
-                                            println("must leave at \(hour):\(minutes):\(seconds)");
+                                            
+                                            //subtract 15 minutes
+                                            let finalCal = NSCalendar.currentCalendar()
+                                            let finalDate = finalCal.dateByAddingUnit(.CalendarUnitSecond, value: negativeSeconds, toDate: date, options: nil)
+                                            
+                                            println("leave at \(finalDate)");
+                        
+                                            println("must leave at \(hour):\(minutes)");
+                                            
                                             var dateFormatter = NSDateFormatter()
                                             
-                                            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
-                                            dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
-                                            dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
+//                                            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+//                                            dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
+                                            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
                                             
-                                            let cal = NSCalendar(calendarIdentifier: NSGregorianCalendar)
-                                            let newDate = cal!.startOfDayForDate(date)
-                                            alarmMgr.timeCalculated[self.index] = newDate;
+                                            
+//                                            var dateString = "2014-07-15" // change to your date format
+//                                            
+//                                            var dateFormatter = NSDateFormatter()
+//                                            dateFormatter.dateFormat = "yyyy-MM-dd"
+//                                            
+//                                            var date = dateFormatter.dateFromString(dateString)
+//                                            
+                                            
+                                            //let cal = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+                                            let cal = NSCalendar.currentCalendar()
+                                            let newDate = calendar.startOfDayForDate(date)
+                                            alarmMgr.timeCalculated[self.index] = finalDate;
                                             
                                         }
                                     }
@@ -257,7 +278,7 @@ class DetailViewController: UIViewController {
         alarmMgr.destination[index] = destination!.text;
         alarmMgr.bufferTime[index] = bufferTime!.text.toInt();
         
-        //getTraffic();
+        getTraffic();
         //vars
         //println(alarmMgr.destination[index]);
         //println(alarmMgr.timeOfArrival[index]);
@@ -283,15 +304,17 @@ class DetailViewController: UIViewController {
         
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
-        dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
         
         var strDate = dateFormatter.stringFromDate(date);
-        
+    
+        var todayDate = dateFormatter.dateFromString(strDate as String)
+        println(todayDate);
         //println("Time planned \(alarmMgr.timeOfArrival[index]!)");
         println("Time calculated \(alarmMgr.timeCalculated[index]!)");
         //println("current date is \(strDate) current alarm is \(alarmMgr.time[index])");
          //if (strDate != ""){
-        
+         
         
         // Date comparision to compare current date and end date.
         var dateComparisionResult:NSComparisonResult = date.compare(alarmMgr.timeCalculated[index]!)
@@ -305,9 +328,9 @@ class DetailViewController: UIViewController {
             //Notification
             var localNotification:UILocalNotification = UILocalNotification()
             localNotification.alertBody = "Alarm went off"
-            localNotification.fireDate = NSDate(timeIntervalSinceNow: 0)
-            localNotification.soundName = UILocalNotificationDefaultSoundName
-            //localNotification.soundName = "who_are_you.mp3"
+            localNotification.fireDate = NSDate(timeIntervalSinceNow: 10)
+            //localNotification.soundName = UILocalNotificationDefaultSoundName
+            localNotification.soundName = "alarm.mp3"
             UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
             
             func stopPlayer(){
@@ -327,7 +350,7 @@ class DetailViewController: UIViewController {
                 self.audioPlayer.stop()
             }))
             
-            var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("who_are_you", ofType: "mp3")!)
+            var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
             
             // Removed deprecated use of AVAudioSessionDelegate protocol
             AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
@@ -342,8 +365,6 @@ class DetailViewController: UIViewController {
         else if dateComparisionResult == NSComparisonResult.OrderedAscending
         {
             println("less than");
-            println("match");
-            
 
         }
         else if dateComparisionResult == NSComparisonResult.OrderedSame

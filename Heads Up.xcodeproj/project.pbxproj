@@ -16,11 +16,11 @@
 		9C3C367B1AD9E154004549CE /* Heads_UpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C367A1AD9E154004549CE /* Heads_UpTests.swift */; };
 		9C3C36851AD9ED71004549CE /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36841AD9ED71004549CE /* Alarm.swift */; };
 		9C3C36871AD9EDB6004549CE /* GeoLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3C36861AD9EDB6004549CE /* GeoLocation.swift */; };
+		9C7CA95E1B30ED0C00984FBF /* alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9C7CA95D1B30ED0C00984FBF /* alarm.mp3 */; };
 		9C837DD81ADB62720047D4E9 /* HTTPTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DD71ADB62720047D4E9 /* HTTPTask.swift */; };
 		9C837DDA1ADB628F0047D4E9 /* HTTPResponseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DD91ADB628F0047D4E9 /* HTTPResponseSerializer.swift */; };
 		9C837DDC1ADB629F0047D4E9 /* HTTPRequestSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDB1ADB629F0047D4E9 /* HTTPRequestSerializer.swift */; };
 		9C837DDE1ADB62AC0047D4E9 /* HTTPUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDD1ADB62AC0047D4E9 /* HTTPUpload.swift */; };
-		9CD4B42C1B1D722100D30871 /* who_are_you.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9CD4B42B1B1D722100D30871 /* who_are_you.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,11 +47,11 @@
 		9C3C367A1AD9E154004549CE /* Heads_UpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heads_UpTests.swift; sourceTree = "<group>"; };
 		9C3C36841AD9ED71004549CE /* Alarm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
 		9C3C36861AD9EDB6004549CE /* GeoLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoLocation.swift; sourceTree = "<group>"; };
+		9C7CA95D1B30ED0C00984FBF /* alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = alarm.mp3; sourceTree = "<group>"; };
 		9C837DD71ADB62720047D4E9 /* HTTPTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPTask.swift; sourceTree = "<group>"; };
 		9C837DD91ADB628F0047D4E9 /* HTTPResponseSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResponseSerializer.swift; sourceTree = "<group>"; };
 		9C837DDB1ADB629F0047D4E9 /* HTTPRequestSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequestSerializer.swift; sourceTree = "<group>"; };
 		9C837DDD1ADB62AC0047D4E9 /* HTTPUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUpload.swift; sourceTree = "<group>"; };
-		9CD4B42B1B1D722100D30871 /* who_are_you.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = who_are_you.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +93,7 @@
 		9C3C365F1AD9E154004549CE /* Heads Up */ = {
 			isa = PBXGroup;
 			children = (
-				9CD4B42B1B1D722100D30871 /* who_are_you.mp3 */,
+				9C7CA95D1B30ED0C00984FBF /* alarm.mp3 */,
 				9C3C36621AD9E154004549CE /* AppDelegate.swift */,
 				9C3C36641AD9E154004549CE /* MasterViewController.swift */,
 				9C3C36661AD9E154004549CE /* DetailViewController.swift */,
@@ -224,8 +224,8 @@
 			files = (
 				9C3C366A1AD9E154004549CE /* Main.storyboard in Resources */,
 				9C3C366F1AD9E154004549CE /* LaunchScreen.xib in Resources */,
-				9CD4B42C1B1D722100D30871 /* who_are_you.mp3 in Resources */,
 				9C3C366C1AD9E154004549CE /* Images.xcassets in Resources */,
+				9C7CA95E1B30ED0C00984FBF /* alarm.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

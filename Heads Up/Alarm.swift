@@ -41,7 +41,8 @@ class Alarm: NSObject {
     var destination = [String?]()
     var timeOfArrival = [NSDate?]()
     var bufferTime = [Int?]()
-    var timeCalculated = [NSDate?]()
+//    var timeCalculated = [NSDate?]()
 
+    var timeCalculated = [NSDate?]()
 }
 

@@ -39,6 +39,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
+    
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
             
