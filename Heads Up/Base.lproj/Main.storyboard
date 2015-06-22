@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rS3-R9-Ivy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="rS3-R9-Ivy">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--Master-->
@@ -103,24 +103,6 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ck-Ml-6EX">
-                                <rect key="frame" x="149" y="586" width="302" height="30"/>
-                                <state key="normal" title="Add">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="addAlarm:" destination="Ah7-4n-0Wa" eventType="touchDown" id="vxl-z3-AFB"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="12:00pm" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mXo-FB-rWe">
-                                <rect key="frame" x="154" y="72" width="302" height="39"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="lpe-Wd-a2v">
-                                <rect key="frame" x="253" y="549" width="94" height="29"/>
-                            </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Minutes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68v-a6-R00">
                                 <rect key="frame" x="267" y="519" width="67" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -132,17 +114,24 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ck-Ml-6EX">
+                                <rect key="frame" x="149" y="550" width="302" height="30"/>
+                                <state key="normal" title="Add">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addAlarm:" destination="Ah7-4n-0Wa" eventType="touchDown" id="vxl-z3-AFB"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="2dw-SP-akF" secondAttribute="centerX" id="53g-RS-cPG"/>
                             <constraint firstAttribute="centerX" secondItem="KWF-i6-ACn" secondAttribute="centerX" id="Bi2-cm-BV8"/>
-                            <constraint firstAttribute="centerX" secondItem="lpe-Wd-a2v" secondAttribute="centerX" id="H4P-lg-Xl1"/>
                             <constraint firstAttribute="centerX" secondItem="7U9-GI-O4a" secondAttribute="centerX" id="Ije-4P-pv4"/>
                             <constraint firstAttribute="centerX" secondItem="68v-a6-R00" secondAttribute="centerX" id="Qrz-J3-tcA"/>
                             <constraint firstAttribute="centerX" secondItem="Req-dV-O3T" secondAttribute="centerX" id="Sde-n0-RBr"/>
                             <constraint firstAttribute="centerX" secondItem="68v-a6-R00" secondAttribute="centerX" id="Ztp-eV-qQT"/>
-                            <constraint firstAttribute="centerX" secondItem="mXo-FB-rWe" secondAttribute="centerX" id="i7B-Bj-giw"/>
                             <constraint firstAttribute="centerX" secondItem="xZd-yX-WWl" secondAttribute="centerX" id="ndP-Lc-nbJ"/>
                             <constraint firstAttribute="centerX" secondItem="7iJ-Xs-hU8" secondAttribute="centerX" id="pKd-Hi-LyL"/>
                             <constraint firstAttribute="centerX" secondItem="3ck-Ml-6EX" secondAttribute="centerX" id="xbm-Ib-zMp"/>

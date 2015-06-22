@@ -85,6 +85,11 @@ class DetailViewController: UIViewController {
             bufferTime!.text = str;
         }
     }
+    
+    func textFieldShouldReturn(textField: UITextField!) -> Bool{
+        textField.resignFirstResponder();
+        return true;
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -291,6 +296,9 @@ class DetailViewController: UIViewController {
         
         //Check for alarms
         alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
+        
+        self.view.endEditing(true);
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     func checkAlarm() {
