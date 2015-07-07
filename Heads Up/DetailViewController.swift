@@ -19,6 +19,7 @@ class DetailViewController: UIViewController {
     @IBOutlet var timeOfArrival: UITextField?
     @IBOutlet var bufferTime: UITextField?
     @IBOutlet var alarmText: UITextField?
+    @IBOutlet var alarmName: UITextField?
     
     var index: Int = Int();
     var audioPlayer = AVAudioPlayer()
@@ -72,7 +73,9 @@ class DetailViewController: UIViewController {
         self.configureView()
         myDatePicker.datePickerMode = UIDatePickerMode.Time // 4- use time only
         myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-        
+        if (alarmMgr.name[index] != nil){
+            alarmName!.text = alarmMgr.name[index];
+        }
         if (alarmMgr.destination[index] != nil){
             destination!.text = alarmMgr.destination[index];
         }
@@ -83,6 +86,16 @@ class DetailViewController: UIViewController {
             let x : Int = alarmMgr.bufferTime[index]!
             var str = String(x)
             bufferTime!.text = str;
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let name = defaults.stringForKey("destination")
+        {
+            println("destination \(name)")
         }
     }
     
@@ -223,7 +236,9 @@ class DetailViewController: UIViewController {
                                             var secondsChanged = totalTimeWithDelay;
                                             var minutesChanged = (totalTimeWithDelay) % 60;
                                             var hoursChanged = minutesChanged / 60;
-                                            let negativeSeconds = -secondsChanged;
+                                            var buffer = alarmMgr.bufferTime[self.index]! * 60;
+                                            println("buffer \(buffer)");
+                                            let negativeSeconds = -secondsChanged - buffer;
                                             
                                             //Get current time
                                             let date = alarmMgr.timeOfArrival[self.index]!
@@ -282,6 +297,7 @@ class DetailViewController: UIViewController {
         println(locationMgr.user_lng);
         alarmMgr.destination[index] = destination!.text;
         alarmMgr.bufferTime[index] = bufferTime!.text.toInt();
+        alarmMgr.name[index] = alarmName!.text;
         
         getTraffic();
         //vars
@@ -291,14 +307,18 @@ class DetailViewController: UIViewController {
         
         //alarmText!.text = alarmMgr.time[index]!;
         
-        //Check for traffic
-        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: Selector("getTraffic"), userInfo: nil, repeats: true)
+        //Check for traffic loop
+        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("getTraffic"), userInfo: nil, repeats: true)
         
-        //Check for alarms
+        //Check for alarms loop
         alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
         
         self.view.endEditing(true);
         self.navigationController?.popViewControllerAnimated(true)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(alarmMgr.destination[index], forKey: "destination")
+        //defaults.setObject("crap", forKey: "string")
     }
     
     func checkAlarm() {

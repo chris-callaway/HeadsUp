@@ -21,6 +21,15 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        tableView.delegate = self
+        tableView.dataSource = self
+        //let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        //let name = alarmMgr.time[indexPath.row]
+//        if (name != ""){
+//            if let nameLabel = cell.viewWithTag(100) as? UILabel {
+//                nameLabel.text = alarmMgr.name[indexPath.row];
+//            }
+//        }
     }
 
     override func viewDidLoad() {
@@ -39,6 +48,9 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: {(placemarks, error)->Void in
@@ -170,7 +182,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
     }
 
     func insertNewObject(sender: AnyObject) {
-        objects.insert("New Alarm", atIndex: 0)
+        objects.insert("", atIndex: 0)
         let indexPath = NSIndexPath(forRow: 0, inSection: 0)
         //objects.insert(indexPath, atIndex: 0)
         self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
@@ -184,6 +196,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         alarmMgr.bufferTime.append(nil);
         alarmMgr.total_delay_time.append(nil);
         alarmMgr.total_time_seconds.append(nil);
+        alarmMgr.name.append(nil);
 
     }
 
@@ -191,6 +204,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
+            println("show detail");
             if let indexPath = self.tableView.indexPathForSelectedRow() {
                 let object = objects[indexPath.row] as! String
                 (segue.destinationViewController as! DetailViewController).detailItem = indexPath.row
@@ -213,6 +227,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 
         let object = objects[indexPath.row] as! String
         cell.textLabel!.text = object
+        
         return cell
     }
 
@@ -227,6 +242,10 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 
             if ((alarmMgr.time[indexPath.row]) != nil){
                 alarmMgr.time.removeAtIndex(indexPath.row)
+            }
+            
+            if ((alarmMgr.name[indexPath.row]) != nil){
+                alarmMgr.name.removeAtIndex(indexPath.row)
             }
             
             if ((alarmMgr.alarm_scheduler[indexPath.row]) != nil){

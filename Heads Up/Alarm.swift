@@ -22,6 +22,7 @@ struct alarm{
     var timeCalculated = [];
     
     //Fields
+    var name = [];
     var destination = [];
     var timeOfArrival = [];
     var bufferTime = [];
@@ -29,6 +30,7 @@ struct alarm{
 
 class Alarm: NSObject {
     var time = [String?]()
+    var name = [String?]()
     var alarm_scheduler = [NSTimer?]()
     var traffic_scheduler = [NSTimer?]()
     var hour = 0 as Int;

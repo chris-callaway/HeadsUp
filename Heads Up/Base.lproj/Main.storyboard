@@ -28,19 +28,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="2pz-XF-uhl" style="IBUITableViewCellStyleDefault" id="m0d-ak-lc9">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="m0d-ak-lc9">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m0d-ak-lc9" id="d3P-M7-ByW">
                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2pz-XF-uhl">
-                                            <rect key="frame" x="15" y="0.0" width="270" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="New Alarm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRM-Z1-w7I">
+                                            <rect key="frame" x="8" y="11" width="84" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
@@ -123,12 +122,25 @@
                                     <action selector="addAlarm:" destination="Ah7-4n-0Wa" eventType="touchDown" id="vxl-z3-AFB"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5eP-RW-mbs">
+                                <rect key="frame" x="154" y="70" width="302" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vk3-S0-M41">
+                                <rect key="frame" x="154" y="99" width="302" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerX" secondItem="5eP-RW-mbs" secondAttribute="centerX" id="2Cj-9s-hqH"/>
                             <constraint firstAttribute="centerX" secondItem="2dw-SP-akF" secondAttribute="centerX" id="53g-RS-cPG"/>
                             <constraint firstAttribute="centerX" secondItem="KWF-i6-ACn" secondAttribute="centerX" id="Bi2-cm-BV8"/>
                             <constraint firstAttribute="centerX" secondItem="7U9-GI-O4a" secondAttribute="centerX" id="Ije-4P-pv4"/>
+                            <constraint firstAttribute="centerX" secondItem="Vk3-S0-M41" secondAttribute="centerX" id="K2v-Pa-xEl"/>
                             <constraint firstAttribute="centerX" secondItem="68v-a6-R00" secondAttribute="centerX" id="Qrz-J3-tcA"/>
                             <constraint firstAttribute="centerX" secondItem="Req-dV-O3T" secondAttribute="centerX" id="Sde-n0-RBr"/>
                             <constraint firstAttribute="centerX" secondItem="68v-a6-R00" secondAttribute="centerX" id="Ztp-eV-qQT"/>
@@ -139,6 +151,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Edit Alarm" id="cra-N8-TIN"/>
                     <connections>
+                        <outlet property="alarmName" destination="Vk3-S0-M41" id="1Fl-49-RQ0"/>
                         <outlet property="bufferTime" destination="xZd-yX-WWl" id="Cb9-1c-cSo"/>
                         <outlet property="destination" destination="Req-dV-O3T" id="Xyi-DU-zcp"/>
                         <outlet property="myDatePicker" destination="7iJ-Xs-hU8" id="hYN-4A-aYw"/>
@@ -146,7 +159,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1377" y="89"/>
+            <point key="canvasLocation" x="1339" y="84"/>
         </scene>
     </scenes>
 </document>
