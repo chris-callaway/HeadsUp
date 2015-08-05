@@ -14,12 +14,14 @@ import SpriteKit
 class DetailViewController: UIViewController {
 
     @IBOutlet weak var detailDescriptionLabel: UILabel!
-    @IBOutlet weak var myDatePicker: UIDatePicker!
+    //@IBOutlet weak var myDatePicker: UIDatePicker!
     @IBOutlet var destination: UITextField?
     @IBOutlet var timeOfArrival: UITextField?
     @IBOutlet var bufferTime: UITextField?
     @IBOutlet var alarmText: UITextField?
     @IBOutlet var alarmName: UITextField?
+    
+    var myDatePicker:UIDatePicker = UIDatePicker()
     
     var index: Int = Int();
     var audioPlayer = AVAudioPlayer()
@@ -68,20 +70,22 @@ class DetailViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        // extra comment
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
-        myDatePicker.datePickerMode = UIDatePickerMode.Time // 4- use time only
-        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+//        myDatePicker.datePickerMode = UIDatePickerMode.Time // 4- use time only
+//        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
         if (alarmMgr.name[index] != nil){
             alarmName!.text = alarmMgr.name[index];
         }
         if (alarmMgr.destination[index] != nil){
             destination!.text = alarmMgr.destination[index];
         }
-        if (alarmMgr.timeOfArrival[index] != nil){
-            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
-        }
+//        if (alarmMgr.timeOfArrival[index] != nil){
+//            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
+//        }
         if (alarmMgr.bufferTime[index] != nil){
             let x : Int = alarmMgr.bufferTime[index]!
             var str = String(x)
@@ -92,11 +96,11 @@ class DetailViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if let name = defaults.stringForKey("destination")
-        {
-            println("destination \(name)")
-        }
+//        let defaults = NSUserDefaults.standardUserDefaults()
+//        if let name = defaults.stringForKey("destination")
+//        {
+//            println("destination \(name)")
+//        }
     }
     
     func textFieldShouldReturn(textField: UITextField!) -> Bool{
@@ -316,8 +320,8 @@ class DetailViewController: UIViewController {
         self.view.endEditing(true);
         self.navigationController?.popViewControllerAnimated(true)
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(alarmMgr.destination[index], forKey: "destination")
+        //let defaults = NSUserDefaults.standardUserDefaults()
+        //defaults.setObject(alarmMgr.destination[index], forKey: "destination")
         //defaults.setObject("crap", forKey: "string")
     }
     
@@ -419,6 +423,48 @@ class DetailViewController: UIViewController {
 //            alert.show()
 
         //}
+    }
+    
+    @IBAction func timeToArrive(sender: UITextField) {
+        
+        //myDatePicker.datePickerMode = UIDatePickerMode.Date
+        
+        sender.inputView = myDatePicker
+        
+//        myDatePicker.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
+        myDatePicker.datePickerMode = UIDatePickerMode.Time
+        
+        if (alarmMgr.timeOfArrival[index] != nil){
+            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
+        }
+    }
+    
+    @IBAction func endedAddingDate(sender: UITextField) {
+        //var myDatePicker:UIDatePicker = UIDatePicker()
+        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        if (alarmMgr.timeOfArrival[index] != nil){
+            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
+        }
+        var item = alarmMgr.timeOfArrival[index];
+        if (item != nil){
+            //alarmMgr.timeOfArrival[index] = dateFormatter.stringFromDate(myDatePicker.date);
+            alarmMgr.timeOfArrival[index] = myDatePicker.date
+        }
+        println("changed \(alarmMgr.timeOfArrival[index])");
+    }
+    
+    func datePickerValueChanged(sender:UIDatePicker) {
+        
+        var dateFormatter = NSDateFormatter()
+        var strDate = dateFormatter.stringFromDate(myDatePicker.date)
+        dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+        dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
+        dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
+        println("index is \(index)");
+        println("total alarms");
+        println(count(alarmMgr.time));
+        
     }
 
 }

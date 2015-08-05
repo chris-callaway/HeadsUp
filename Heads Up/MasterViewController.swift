@@ -36,9 +36,14 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
-        self.navigationItem.leftBarButtonItem = self.editButtonItem()
+        
+        if (objects.count > 1){
+            self.navigationItem.leftBarButtonItem = self.editButtonItem()
+            self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+        }
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+        addButton.tintColor = UIColor.whiteColor()
         self.navigationItem.rightBarButtonItem = addButton
         
         //Find user location
@@ -46,10 +51,23 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
+        
+        //set top bar color
+        navigationController!.navigationBar.barTintColor = UIColor(red:  251/255.0, green: 138/255.0, blue: 16/255.0, alpha: 100.0/100.0)
+        //set top bar text color
+        navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
+
+        
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        if (objects.count > 1){
+            self.navigationItem.leftBarButtonItem = self.editButtonItem()
+            self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+        }
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -197,6 +215,11 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         alarmMgr.total_delay_time.append(nil);
         alarmMgr.total_time_seconds.append(nil);
         alarmMgr.name.append(nil);
+        
+        if (objects.count >= 1){
+            self.navigationItem.leftBarButtonItem = self.editButtonItem()
+            self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+        }
 
     }
 
@@ -280,6 +303,12 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         
             println("Removed alarm");
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+            if (objects.count < 1){
+                self.navigationItem.leftBarButtonItem = nil
+                self.navigationItem.leftBarButtonItem?.tintColor = nil
+            }
+            
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
