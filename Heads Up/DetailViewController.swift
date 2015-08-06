@@ -429,7 +429,7 @@ class DetailViewController: UIViewController {
         
         //myDatePicker.datePickerMode = UIDatePickerMode.Date
         
-        sender.inputView = myDatePicker
+        //sender.inputView = myDatePicker
         
 //        myDatePicker.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
@@ -438,6 +438,29 @@ class DetailViewController: UIViewController {
         if (alarmMgr.timeOfArrival[index] != nil){
             myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
         }
+        
+        //Create the view
+        let inputView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 240))
+        
+        
+//        var datePickerView  : UIDatePicker = UIDatePicker(frame: CGRectMake(0, 40, 0, 0))
+//        datePickerView.datePickerMode = UIDatePickerMode.Date
+        inputView.addSubview(myDatePicker) // add date picker to UIView
+        
+        let doneButton = UIButton(frame: CGRectMake((self.view.frame.size.width/2) - (-100), 0, 100, 50))
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.setTitle("Done", forState: UIControlState.Highlighted)
+        doneButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        doneButton.setTitleColor(UIColor.grayColor(), forState: UIControlState.Highlighted)
+        
+        inputView.addSubview(doneButton) // add Button to UIView
+        
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside) // set button click event
+        
+        sender.inputView = inputView
+        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
+        datePickerValueChanged(myDatePicker) // Set the date on start.
     }
     
     @IBAction func endedAddingDate(sender: UITextField) {
@@ -452,7 +475,8 @@ class DetailViewController: UIViewController {
             alarmMgr.timeOfArrival[index] = myDatePicker.date
         }
         println("changed \(alarmMgr.timeOfArrival[index])");
-    }
+        
+    } 
     
     func datePickerValueChanged(sender:UIDatePicker) {
         
@@ -465,6 +489,12 @@ class DetailViewController: UIViewController {
         println("total alarms");
         println(count(alarmMgr.time));
         
+    }
+    
+    func doneButton(sender:UIButton)
+    {
+        //myDatePicker.resignFirstResponder() // To resign the inputView on clicking done.
+        self.view.endEditing(true)
     }
 
 }
