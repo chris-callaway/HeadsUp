@@ -9,15 +9,36 @@
 import UIKit
 import CoreLocation
 import Foundation
+import AVFoundation
+
+class CustomTableViewCell: UITableViewCell {
+
+    @IBOutlet weak var alarmSwitch: UISwitch!
+    
+    @IBAction func alarmSwitchChanged(sender: AnyObject) {
+        
+        if (alarmSwitch.on){
+            var text = alarmMgr.time[0];
+            println("ON");
+        } else{
+            println("OFF");
+        }
+    }
+    
+//    alarmSwitch.setOn(false, animated:true)
+    
+}
 
 class MasterViewController: UITableViewController, CLLocationManagerDelegate {
-
+    
     var objects = [AnyObject]()
     
     var latitude: Float = Float();
     var longitude: Float = Float();
     let locationManager = CLLocationManager()
 
+    var audioPlayer = AVAudioPlayer()
+    //@IBOutlet weak var alarmSwitch: UISwitch!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -57,13 +78,12 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         //set top bar text color
         navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor();
-
-        
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+        println("appeared");
+        self.tableView.reloadData()
         if (objects.count > 1){
             self.navigationItem.leftBarButtonItem = self.editButtonItem()
             self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
@@ -219,6 +239,9 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         if (objects.count >= 1){
             self.navigationItem.leftBarButtonItem = self.editButtonItem()
             self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
+            removeEmptyTableText();
+        } else{
+            addEmptyTableText()
         }
 
     }
@@ -234,6 +257,22 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
+    func addEmptyTableText(){
+        let textView = UITextView(frame: CGRectMake(35.0, 30.0, 300.0, 30.0))
+        textView.textAlignment = NSTextAlignment.Center
+        textView.textColor = UIColor.grayColor()
+        textView.text = "There is no alarm";
+        self.view.addSubview(textView)
+    }
+    
+    func removeEmptyTableText(){
+        for textView in view.subviews {
+            if textView is UITextView {
+                textView.removeFromSuperview()
+            }
+        }
+    }
 
     // MARK: - Table View
 
@@ -242,6 +281,10 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if (objects.count == 0){
+            println("empty table");
+            addEmptyTableText();
+        }
         return objects.count
     }
 
@@ -250,7 +293,66 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 
         let object = objects[indexPath.row] as! String
         cell.textLabel!.text = object
+        //if (alarmMgr.timeOfArrival[indexPath.row] != nil){
+        //if let route = data["route"]! as? NSDictionary {
+
+        if let myArray: Array = alarmMgr.timeOfArrival as? Array {
+            if myArray.count > 0 { // <- HERE
+                println("array is not empty");
+                if let element: NSDate = alarmMgr.timeOfArrival[indexPath.row] as? NSDate! {
+                    var dateFormatter = NSDateFormatter();
+                    dateFormatter.dateFormat = "hh:mm"
+                    var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[indexPath.row]!);
+                    
+                    if let label = cell.viewWithTag(100) as? UILabel {
+                        label.text = dateString
+                    }
+                    
+                    var dateFormatter2 = NSDateFormatter();
+                    dateFormatter2.dateFormat = "a"
+                    var dateString2 = dateFormatter2.stringFromDate(alarmMgr.timeOfArrival[indexPath.row]!);
+                    
+                    if let label2 = cell.viewWithTag(101) as? UILabel {
+                        label2.text = dateString2
+                    }
+                    
+                    if let name = cell.viewWithTag(102) as? UILabel {
+                        name.text = alarmMgr.name[indexPath.row]!
+                    }
+                    
+//                    cell.textLabel!.text = dateString;
+//                    cell.detailTextLabel?.text = "new";
+                }
+            }
+        } else{
+            println("no time set");
+        }
         
+//        if let alarm = alarmMgr as? Alarm{
+//            if let array = alarmMgr.timeOfArrival as! Array?{
+//                println((indexPath.row));
+//                var count = alarmMgr.timeOfArrival.count;
+//                if (indexPath.row <= count){
+//                    if let time = alarmMgr.timeOfArrival[indexPath.row]{
+//                        println("has time");
+//                    }
+//                }
+//            }
+//            println("has alarm");
+//        } else{
+//            println("no time yet");
+//        }
+            //if (date != nil){
+//                var dateFormatter = NSDateFormatter();
+//                dateFormatter.dateFormat = "hh:mm"
+//                var dateString = dateFormatter.stringFromDate(date);
+//                cell.textLabel!.text = dateString;
+//                cell.detailTextLabel?.text = "new";
+            //}
+//        } else{
+//            cell.textLabel!.text = "No Time Set";
+//            cell.detailTextLabel?.text = "";
+//        }
         return cell
     }
 

@@ -95,7 +95,10 @@ class DetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+        var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
+        var error:NSError?
+        audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
+        audioPlayer.stop();
 //        let defaults = NSUserDefaults.standardUserDefaults()
 //        if let name = defaults.stringForKey("destination")
 //        {
@@ -373,7 +376,7 @@ class DetailViewController: UIViewController {
             var alert: UIAlertView!
             alert = UIAlertView(title: "", message: alertMsg, delegate: nil, cancelButtonTitle: "OK")
             sleep(5)
-            //alert.show()
+            alert.show()
             
             var uiAlert = UIAlertController(title: "Time to go!", message: "Message", preferredStyle: UIAlertControllerStyle.Alert)
             self.presentViewController(uiAlert, animated: true, completion: nil)

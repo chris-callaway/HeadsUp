@@ -21,6 +21,7 @@
 		9C837DDA1ADB628F0047D4E9 /* HTTPResponseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DD91ADB628F0047D4E9 /* HTTPResponseSerializer.swift */; };
 		9C837DDC1ADB629F0047D4E9 /* HTTPRequestSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDB1ADB629F0047D4E9 /* HTTPRequestSerializer.swift */; };
 		9C837DDE1ADB62AC0047D4E9 /* HTTPUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDD1ADB62AC0047D4E9 /* HTTPUpload.swift */; };
+		CECB04C71BAB43DA00FCBFAB /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		9C837DD91ADB628F0047D4E9 /* HTTPResponseSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResponseSerializer.swift; sourceTree = "<group>"; };
 		9C837DDB1ADB629F0047D4E9 /* HTTPRequestSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequestSerializer.swift; sourceTree = "<group>"; };
 		9C837DDD1ADB62AC0047D4E9 /* HTTPUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPUpload.swift; sourceTree = "<group>"; };
+		CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				9C3C366B1AD9E154004549CE /* Images.xcassets */,
 				9C3C366D1AD9E154004549CE /* LaunchScreen.xib */,
 				9C3C36601AD9E154004549CE /* Supporting Files */,
+				CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */,
 			);
 			path = "Heads Up";
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				9C3C36651AD9E154004549CE /* MasterViewController.swift in Sources */,
 				9C3C36871AD9EDB6004549CE /* GeoLocation.swift in Sources */,
 				9C3C36631AD9E154004549CE /* AppDelegate.swift in Sources */,
+				CECB04C71BAB43DA00FCBFAB /* CustomTableViewCell.swift in Sources */,
 				9C3C36851AD9ED71004549CE /* Alarm.swift in Sources */,
 				9C837DDE1ADB62AC0047D4E9 /* HTTPUpload.swift in Sources */,
 				9C837DDA1ADB628F0047D4E9 /* HTTPResponseSerializer.swift in Sources */,
