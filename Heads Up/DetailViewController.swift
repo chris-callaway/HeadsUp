@@ -20,6 +20,11 @@ class DetailViewController: UIViewController {
     @IBOutlet var bufferTime: UITextField?
     @IBOutlet var alarmText: UITextField?
     @IBOutlet var alarmName: UITextField?
+    @IBOutlet weak var timeToArriveField: UITextField!
+    
+    @IBAction func mapButtonClicked(sender: AnyObject) {
+//        performSegueWithIdentifier("mapView", sender: self)
+    }
     
     var myDatePicker:UIDatePicker = UIDatePicker()
     
@@ -82,6 +87,12 @@ class DetailViewController: UIViewController {
         }
         if (alarmMgr.destination[index] != nil){
             destination!.text = alarmMgr.destination[index];
+        }
+        if (alarmMgr.timeOfArrival[index] != nil && alarmMgr.name[index] != nil){
+            var dateFormatter = NSDateFormatter();
+            dateFormatter.dateFormat = "hh:mm a"
+            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+            timeToArriveField.text = dateString;
         }
 //        if (alarmMgr.timeOfArrival[index] != nil){
 //            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
@@ -479,7 +490,11 @@ class DetailViewController: UIViewController {
         }
         println("changed \(alarmMgr.timeOfArrival[index])");
         
-    } 
+        var dateFormatter = NSDateFormatter();
+        dateFormatter.dateFormat = "hh:mm a"
+        var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+        timeToArriveField.text = dateString;
+    }
     
     func datePickerValueChanged(sender:UIDatePicker) {
         

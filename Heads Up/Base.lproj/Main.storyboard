@@ -136,7 +136,7 @@
                                     <action selector="addAlarm:" destination="Ah7-4n-0Wa" eventType="touchDown" id="vxl-z3-AFB"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add a name..." textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vk3-S0-M41">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Add a name..." textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vk3-S0-M41">
                                 <rect key="frame" x="150" y="99" width="301" height="30"/>
                                 <color key="textColor" red="0.96470588239999999" green="0.46274509800000002" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -170,14 +170,27 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9G-pC-1Cm">
+                                <rect key="frame" x="277" y="64" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="mapButtonClicked:" destination="Ah7-4n-0Wa" eventType="touchUpInside" id="dy7-2D-Cfs"/>
+                                    <segue destination="pBS-SW-Ubk" kind="show" identifier="mapView" id="p6H-PH-LDa"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="T9G-pC-1Cm" firstAttribute="centerX" secondItem="Vk3-S0-M41" secondAttribute="centerX" id="4Pg-3E-TUY"/>
                             <constraint firstAttribute="centerX" secondItem="2dw-SP-akF" secondAttribute="centerX" id="53g-RS-cPG"/>
+                            <constraint firstItem="T9G-pC-1Cm" firstAttribute="top" secondItem="cIm-e0-J51" secondAttribute="bottom" id="5c5-sZ-iEE"/>
                             <constraint firstAttribute="centerX" secondItem="KWF-i6-ACn" secondAttribute="centerX" id="Bi2-cm-BV8"/>
                             <constraint firstAttribute="centerX" secondItem="7U9-GI-O4a" secondAttribute="centerX" id="Ije-4P-pv4"/>
                             <constraint firstAttribute="centerX" secondItem="Vk3-S0-M41" secondAttribute="centerX" id="K2v-Pa-xEl"/>
                             <constraint firstAttribute="centerX" secondItem="Req-dV-O3T" secondAttribute="centerX" id="Sde-n0-RBr"/>
+                            <constraint firstItem="Vk3-S0-M41" firstAttribute="top" secondItem="T9G-pC-1Cm" secondAttribute="bottom" constant="5" id="Vkd-fG-JeJ"/>
                             <constraint firstAttribute="centerX" secondItem="X25-bx-fa8" secondAttribute="centerX" id="jSS-m7-QEh"/>
                             <constraint firstAttribute="centerX" secondItem="xZd-yX-WWl" secondAttribute="centerX" id="ndP-Lc-nbJ"/>
                             <constraint firstAttribute="centerX" secondItem="3ck-Ml-6EX" secondAttribute="centerX" id="xbm-Ib-zMp"/>
@@ -188,11 +201,56 @@
                         <outlet property="alarmName" destination="Vk3-S0-M41" id="1Fl-49-RQ0"/>
                         <outlet property="bufferTime" destination="xZd-yX-WWl" id="Cb9-1c-cSo"/>
                         <outlet property="destination" destination="Req-dV-O3T" id="Xyi-DU-zcp"/>
+                        <outlet property="timeToArriveField" destination="X25-bx-fa8" id="J65-cD-SEU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lrm-kH-fPn" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1339" y="84"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="468-1D-Jmn">
+            <objects>
+                <viewController id="pBS-SW-Ubk" customClass="mapViewController" customModule="Heads_Up" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="e0C-vs-SN1"/>
+                        <viewControllerLayoutGuide type="bottom" id="9Es-2K-Njj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cWV-QA-K91">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dPD-Co-z4D">
+                                <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="myMap" destination="dPD-Co-z4D" id="zCy-QB-ixc"/>
+                        <outlet property="routeMap" destination="dPD-Co-z4D" id="60K-7V-DkY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nbq-Sb-N1h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2061" y="84"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="GYe-cG-PYX">
+            <objects>
+                <viewController id="Xpq-qx-wFU" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qBP-ob-0uX"/>
+                        <viewControllerLayoutGuide type="bottom" id="US2-sQ-qcz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gs1-4x-JZN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WiZ-Vc-0DK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
 </document>
