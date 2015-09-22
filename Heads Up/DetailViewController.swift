@@ -57,7 +57,6 @@ class DetailViewController: UIViewController {
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
-        println("index is \(index)");
         var strDate = dateFormatter.stringFromDate(myDatePicker.date)
         //alarmMgr.time.append(dateFormatter.stringFromDate(myDatePicker.date));
         var item = alarmMgr.timeOfArrival[index];
@@ -76,12 +75,9 @@ class DetailViewController: UIViewController {
     }
 
     override func viewDidLoad() {
-        // extra comment
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.configureView()
-//        myDatePicker.datePickerMode = UIDatePickerMode.Time // 4- use time only
-//        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
         // set initial values
         alarmMgr.name[index] = "";
@@ -110,10 +106,6 @@ class DetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
-        var error:NSError?
-        audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
-        audioPlayer.stop();
 //        let defaults = NSUserDefaults.standardUserDefaults()
 //        if let name = defaults.stringForKey("destination")
 //        {
@@ -390,6 +382,53 @@ class DetailViewController: UIViewController {
         return strDate;
     }
     
+    func deactivateAlarm() -> Void{
+        alarmMgr.alarm_scheduler[index]!.invalidate()
+        alarmMgr.traffic_scheduler[index]!.invalidate()
+    }
+    
+    func configurePushNotification() -> Void{
+        // push notification setup
+        var localNotification:UILocalNotification = UILocalNotification()
+        localNotification.alertBody = "Alarm went off"
+        localNotification.hasAction = true;
+        localNotification.fireDate = NSDate(timeIntervalSinceNow: 10)
+        localNotification.soundName = "alarm.mp3"
+        
+        // schedule push notification
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+    }
+    
+    func showAlertMessage() -> Void{
+        // configure alert message
+        var alertController = UIAlertController(title: "Time to go!", message: "Time to go!", preferredStyle: .Alert)
+        var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            self.audioPlayer.stop()
+        }
+        alertController.addAction(okAction)
+        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+    }
+    
+    func timeToGo() -> Void{
+        deactivateAlarm();
+        configurePushNotification();
+        showAlertMessage();
+        
+        // configure alert sound
+        var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
+        
+        // Removed deprecated use of AVAudioSessionDelegate protocol
+        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
+        AVAudioSession.sharedInstance().setActive(true, error: nil)
+        
+        var error:NSError?
+        audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
+        audioPlayer.prepareToPlay()
+        audioPlayer.numberOfLoops = -1
+        audioPlayer.play()
+    }
+    
     func checkAlarm() {
         //Get current time
         let date = NSDate()
@@ -399,79 +438,34 @@ class DetailViewController: UIViewController {
         var dateComparisionResult:NSComparisonResult = date.compare(alarmMgr.timeCalculated[index]!)
         println("now is \(date) and time to leave is \(alarmMgr.timeCalculated[index]!)");
         
-        // time to go
-        if dateComparisionResult == NSComparisonResult.OrderedDescending
-        {
-            // turn off alarm intervals
-            alarmMgr.alarm_scheduler[index]!.invalidate()
-            alarmMgr.traffic_scheduler[index]!.invalidate()
-            
-            // push notification setup
-            var localNotification:UILocalNotification = UILocalNotification()
-            localNotification.alertBody = "Alarm went off"
-            localNotification.fireDate = NSDate(timeIntervalSinceNow: 10)
-            localNotification.soundName = "alarm.mp3"
-            
-            // schedule push notification
-            UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
-            
-            // configure alert message
-            var alertController = UIAlertController(title: "Time to go!", message: "Time to go!", preferredStyle: .Alert)
-            var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
-                UIAlertAction in
-                self.audioPlayer.stop()
-            }
-            alertController.addAction(okAction)
-            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
-        
-            // configure alert sound
-            var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
-            
-            // Removed deprecated use of AVAudioSessionDelegate protocol
-            AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error: nil)
-            AVAudioSession.sharedInstance().setActive(true, error: nil)
-            
-            var error:NSError?
-            audioPlayer = AVAudioPlayer(contentsOfURL: alertSound, error: &error)
-            audioPlayer.prepareToPlay()
-            audioPlayer.numberOfLoops = -1
-            audioPlayer.play()
-        }
-        // not time to leave yet
-        else if dateComparisionResult == NSComparisonResult.OrderedAscending
-        {
-            println("not time to leave yet");
-
-        }
-        // times hit exact match
-        else if dateComparisionResult == NSComparisonResult.OrderedSame
-        {
-            println("exact match");
+        switch (dateComparisionResult){
+            // time to go
+            case NSComparisonResult.OrderedDescending:
+                timeToGo();
+            break;
+            case NSComparisonResult.OrderedAscending:
+                println("not time to leave yet");
+            break;
+            case NSComparisonResult.OrderedSame:
+                println("exact match");
+            break;
+            default:
+            break;
         }
     }
     
+    // Datepicker UI
     @IBAction func timeToArrive(sender: UITextField) {
-        
-        //myDatePicker.datePickerMode = UIDatePickerMode.Date
-        
-        //sender.inputView = myDatePicker
-        
-//        myDatePicker.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
         myDatePicker.datePickerMode = UIDatePickerMode.Time
         
-        if (alarmMgr.timeOfArrival[index] != nil){
-            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
-        }
+        setTimeOfArrivalUI();
         
         //Create the view
         let inputView = UIView(frame: CGRectMake(0, 0, self.view.frame.width, 240))
-        
-        
-//        var datePickerView  : UIDatePicker = UIDatePicker(frame: CGRectMake(0, 40, 0, 0))
-//        datePickerView.datePickerMode = UIDatePickerMode.Date
         inputView.addSubview(myDatePicker) // add date picker to UIView
         
+        // add done button
         let doneButton = UIButton(frame: CGRectMake((self.view.frame.size.width/2) - (-100), 0, 100, 50))
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.setTitle("Done", forState: UIControlState.Highlighted)
@@ -488,41 +482,49 @@ class DetailViewController: UIViewController {
         datePickerValueChanged(myDatePicker) // Set the date on start.
     }
     
-    @IBAction func endedAddingDate(sender: UITextField) {
-        //var myDatePicker:UIDatePicker = UIDatePicker()
+    func setTimeOfArrivalUI() -> Void{
         myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         if (alarmMgr.timeOfArrival[index] != nil){
             myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
         }
-        var item = alarmMgr.timeOfArrival[index];
-        if (item != nil){
-            //alarmMgr.timeOfArrival[index] = dateFormatter.stringFromDate(myDatePicker.date);
+    }
+    
+    func saveTimeOfArrival() -> Void{
+        // save time of arrival
+        if let item = alarmMgr.timeOfArrival[index] {
             alarmMgr.timeOfArrival[index] = myDatePicker.date
         }
-        println("changed \(alarmMgr.timeOfArrival[index])");
-        
+    }
+    
+    func populateDateField(date : NSDate){
         var dateFormatter = NSDateFormatter();
         dateFormatter.dateFormat = "hh:mm a"
-        var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+        var dateString = dateFormatter.stringFromDate(date);
         timeToArriveField.text = dateString;
     }
     
+    @IBAction func endedAddingDate(sender: UITextField) {
+        setTimeOfArrivalUI();
+        saveTimeOfArrival();
+        populateDateField(alarmMgr.timeOfArrival[index]!);
+    }
+    
+    func printTotalAlarms() -> Void{
+        var totalAlarms = count(alarmMgr.time);
+        println("alarm index is \(index)");
+        println("total alarms \(totalAlarms)");
+    }
+    
     func datePickerValueChanged(sender:UIDatePicker) {
-        
         var dateFormatter = NSDateFormatter()
         var strDate = dateFormatter.stringFromDate(myDatePicker.date)
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
-        println("index is \(index)");
-        println("total alarms");
-        println(count(alarmMgr.time));
-        
     }
     
     func doneButton(sender:UIButton)
     {
-        //myDatePicker.resignFirstResponder() // To resign the inputView on clicking done.
         self.view.endEditing(true)
     }
 
