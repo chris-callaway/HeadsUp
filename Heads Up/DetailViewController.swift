@@ -58,16 +58,7 @@ class DetailViewController: UIViewController {
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
         var strDate = dateFormatter.stringFromDate(myDatePicker.date)
-        //alarmMgr.time.append(dateFormatter.stringFromDate(myDatePicker.date));
-        var item = alarmMgr.timeOfArrival[index];
-        if (item != nil){
-            //alarmMgr.timeOfArrival[index] = dateFormatter.stringFromDate(myDatePicker.date);
-            alarmMgr.timeOfArrival[index] = myDatePicker.date
-        }
-        //alarmMgr.time[index] = dateFormatter.stringFromDate(myDatePicker.date);
-        println("total alarms");
-        println(count(alarmMgr.time));
-        
+        saveTimeOfArrival();
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -94,9 +85,6 @@ class DetailViewController: UIViewController {
             var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
             timeToArriveField.text = dateString;
         }
-//        if (alarmMgr.timeOfArrival[index] != nil){
-//            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
-//        }
         if (alarmMgr.bufferTime[index] != nil){
             let x : Int = alarmMgr.bufferTime[index]!
             var str = String(x)
@@ -106,11 +94,6 @@ class DetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        if let name = defaults.stringForKey("destination")
-//        {
-//            println("destination \(name)")
-//        }
     }
     
     func textFieldShouldReturn(textField: UITextField!) -> Bool{
@@ -255,6 +238,13 @@ class DetailViewController: UIViewController {
         }
     }
     
+    func printTotalTimeDetails(totalTimeWithDelay : Int) -> Void{
+        println("Total time with delay is \(totalTimeWithDelay) seconds");
+        println("total seconds \(alarmMgr.total_time_seconds[self.index])");
+        println("total delay \(alarmMgr.total_delay_time[self.index])");
+        println("total buffer \(alarmMgr.bufferTime[self.index])");
+    }
+    
     func saveTraffic(route: NSDictionary) -> Void{
         if let summary = route["summary"] as? NSDictionary {
             
@@ -272,10 +262,7 @@ class DetailViewController: UIViewController {
             // calculate total time including traffic and time needed to get ready
             var totalTimeWithDelay = alarmMgr.total_delay_time[self.index]! + alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
             
-            println("Total time with delay is \(totalTimeWithDelay) seconds");
-            println("total seconds \(alarmMgr.total_time_seconds[self.index])");
-            println("total delay \(alarmMgr.total_delay_time[self.index])");
-            println("total buffer \(alarmMgr.bufferTime[self.index])");
+            printTotalTimeDetails(totalTimeWithDelay);
             
             // time factoring
             var secondsChanged = totalTimeWithDelay;

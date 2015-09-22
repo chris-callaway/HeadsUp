@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/DetailViewController.swift"
-            timestampString = "464585014.218611"
+            timestampString = "464585504.415533"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
             landmarkName = "saveTraffic(_:)"
             landmarkType = "5">
          </BreakpointContent>
