@@ -51,6 +51,7 @@ class mapViewController: UIViewController, MKMapViewDelegate {
         
             request.setSource(MKMapItem(placemark: markTaipei))
             request.setDestination(MKMapItem(placemark: markChungli))
+            request.transportType = MKDirectionsTransportType.Automobile
             request.requestsAlternateRoutes = false
             
             let directions = MKDirections(request: request)

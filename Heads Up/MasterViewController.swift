@@ -316,8 +316,14 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
                         label2.text = dateString2
                     }
                     
-                    if let name = cell.viewWithTag(102) as? UILabel {
-                        name.text = alarmMgr.name[indexPath.row]!
+                    if let nameField = cell.viewWithTag(102) as? UILabel {
+                        if let alarmManager = alarmMgr as? AnyObject {
+                            if let alarmArr = alarmMgr.name[indexPath.row]! as? String{
+                             
+                                    nameField.text = alarmArr;
+                                
+                            }
+                        }
                     }
                     
 //                    cell.textLabel!.text = dateString;

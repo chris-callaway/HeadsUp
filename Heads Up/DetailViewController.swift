@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import AVFoundation
 import SpriteKit
+import PromiseKit
 
 class DetailViewController: UIViewController {
 
@@ -81,6 +82,9 @@ class DetailViewController: UIViewController {
         self.configureView()
 //        myDatePicker.datePickerMode = UIDatePickerMode.Time // 4- use time only
 //        myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
+        // set initial values
+        alarmMgr.name[index] = "";
         
         if (alarmMgr.name[index] != nil){
             alarmName!.text = alarmMgr.name[index];
@@ -199,134 +203,165 @@ class DetailViewController: UIViewController {
             }
     }
     
-    func getTraffic(){
-        
-        //Convert address string to be HTML safe
+    //Convert address string to be HTML safe
+    func formatAddressForWeb(address : String) -> String{
         let toArraySpace = destination!.text.componentsSeparatedByString(" ")
         let addressPhaseOne = join("+", toArraySpace)
         let toArrayComma = addressPhaseOne.componentsSeparatedByString(",")
         let addressHTML = join("", toArrayComma)
-        println("http://maps.googleapis.com/maps/api/geocode/json?address=\(addressHTML)&sensor=false");
-        self.HTTPGetJSON("http://maps.googleapis.com/maps/api/geocode/json?address=\(addressHTML)&sensor=false") {
-            (data: Dictionary<String, AnyObject>, error: String?) -> Void in
-            if (error != nil){
-                println(error)
-            } else {
-                if let results = data["results"]![0] as? NSDictionary {
-                    if let geometry = results["geometry"] as? NSDictionary {
-                        if let location = geometry["location"] as? NSDictionary {
-                            if let lat = location["lat"] as? Float{
-                                locationMgr.dest_lat = lat;
-                                println("lat is \(lat)");
-                            }
-                            if let lng = location["lng"] as? Float{
-                                locationMgr.dest_lng = lng;
-                                println("lng is \(lng)");
-                            }
-                            
-                            println("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6");
-                            
-                            //Get traffic results for destination
-                            self.HTTPGetJSON("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6") {
-                                (data: Dictionary<String, AnyObject>, error: String?) -> Void in
-                                if (error != nil){
-                                    println(error)
-                                } else {
-                                    println("inside");
-                                    if let route = data["route"]! as? NSDictionary {
-                                        println("found route");
-                                        if let summary = route["summary"] as? NSDictionary {
-                                            println("summary");
-                                            if let totalDelaySeconds = summary["totalDelaySeconds"] as! Int! {
-                                                alarmMgr.total_delay_time[self.index] = totalDelaySeconds;
-                                            }
-                                            if let totalTimeSeconds = summary["totalTimeSeconds"] as? Int {
-                                                alarmMgr.total_time_seconds[self.index] = totalTimeSeconds;
-                                            }
-                                            var totalTimeWithDelay = alarmMgr.total_delay_time[self.index]! + alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
-                                            println("Total time with delay is \(totalTimeWithDelay) seconds");
-                                            //self.delayTime!.text = String(total_delay_time);
-                                            
-                                            println("total seconds \(alarmMgr.total_time_seconds[self.index])");
-                                            println("total delay \(alarmMgr.total_delay_time[self.index])");
-                                            println("total buffer \(alarmMgr.bufferTime[self.index])");
-                                            
-                                            var secondsChanged = totalTimeWithDelay;
-                                            var minutesChanged = (totalTimeWithDelay) % 60;
-                                            var hoursChanged = minutesChanged / 60;
-                                            var buffer = alarmMgr.bufferTime[self.index]! * 60;
-                                            println("buffer \(buffer)");
-                                            let negativeSeconds = -secondsChanged - buffer;
-                                            
-                                            //Get current time
-                                            let date = alarmMgr.timeOfArrival[self.index]!
-                                            let calendar = NSCalendar.currentCalendar()
-                                            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
-                                            println("you want to get there at \(date)");
-                                            let hour = components.hour - hoursChanged
-                                            let minutes = components.minute - minutesChanged
-                                            let seconds = components.second - secondsChanged;
-                                            
-                                            //subtract 15 minutes
-                                            let finalCal = NSCalendar.currentCalendar()
-                                            let finalDate = finalCal.dateByAddingUnit(.CalendarUnitSecond, value: negativeSeconds, toDate: date, options: nil)
-                                            
-                                            println("leave at \(finalDate)");
-                        
-                                            println("must leave at \(hour):\(minutes)");
-                                            
-                                            var dateFormatter = NSDateFormatter()
-                                            
-//                                            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
-//                                            dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
-                                            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
-                                            
-                                            
-//                                            var dateString = "2014-07-15" // change to your date format
-//                                            
-//                                            var dateFormatter = NSDateFormatter()
-//                                            dateFormatter.dateFormat = "yyyy-MM-dd"
-//                                            
-//                                            var date = dateFormatter.dateFromString(dateString)
-//                                            
-                                            
-                                            //let cal = NSCalendar(calendarIdentifier: NSGregorianCalendar)
-                                            let cal = NSCalendar.currentCalendar()
-                                            let newDate = calendar.startOfDayForDate(date)
-                                            alarmMgr.timeCalculated[self.index] = finalDate;
-                                            
-                                        }
-                                    }
+        return addressHTML
+    }
+    
+    func saveDestinationCoords(address : String) -> Promise<Void> {
+        return Promise { fulfill, reject in
+            self.HTTPGetJSON("http://maps.googleapis.com/maps/api/geocode/json?address=\(address)&sensor=false") {
+                (data: Dictionary<String, AnyObject>, error: String?) -> Void in
+                if (error != nil){
+                    println(error)
+                } else {
+                    if let results = data["results"]![0] as? NSDictionary {
+                        if let geometry = results["geometry"] as? NSDictionary {
+                            if let location = geometry["location"] as? NSDictionary {
+                                var haveLat = false;
+                                var haveLng = false;
+                                if let lat = location["lat"] as? Float{
+                                    locationMgr.dest_lat = lat;
+                                    haveLat = true;
+                                }
+                                if let lng = location["lng"] as? Float{
+                                    locationMgr.dest_lng = lng;
+                                    haveLng = true;
+                                }
+                                if (haveLat && haveLng){
+                                    fulfill();
+                                } else{
+                                    reject(NSError());
                                 }
                             }
                         }
-                        
+                    }
+                }
+            }
+
+        }
+    }
+    
+    func getTraffic(Void) -> Promise<NSDictionary> {
+        return Promise { fulfill, reject in
+            self.HTTPGetJSON("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6") {
+                (data: Dictionary<String, AnyObject>, error: String?) -> Void in
+                if (error != nil){
+                    println(error)
+                } else {
+                    if let route = data["route"]! as? NSDictionary {
+                        fulfill(route);
+                    } else{
+                        reject(NSError());
                     }
                 }
             }
         }
-        
-        //var goOff = alarmMgr.total_time_seconds[self.index]! + alarmMgr.total_delay_time[self.index]! + alarmMgr.bufferTime[self.index]!;
-        
     }
     
-    @IBAction func addAlarm(sender : UIButton){
-        println(locationMgr.user_lat);
-        println(locationMgr.user_lng);
+    func saveTraffic(route: NSDictionary) -> Void{
+        if let summary = route["summary"] as? NSDictionary {
+            
+            // total delay in seconds
+            if let totalDelaySeconds = summary["totalDelaySeconds"] as! Int! {
+                println("delay exists");
+                alarmMgr.total_delay_time[self.index] = totalDelaySeconds;
+            }
+            
+            // total time in seconds
+            if let totalTimeSeconds = summary["totalTimeSeconds"] as? Int {
+                alarmMgr.total_time_seconds[self.index] = totalTimeSeconds;
+            }
+            
+            // calculate total time including traffic and time needed to get ready
+            var totalTimeWithDelay = alarmMgr.total_delay_time[self.index]! + alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
+            
+            println("Total time with delay is \(totalTimeWithDelay) seconds");
+            println("total seconds \(alarmMgr.total_time_seconds[self.index])");
+            println("total delay \(alarmMgr.total_delay_time[self.index])");
+            println("total buffer \(alarmMgr.bufferTime[self.index])");
+            
+            // time factoring
+            var secondsChanged = totalTimeWithDelay;
+            var minutesChanged = (totalTimeWithDelay) % 60;
+            var hoursChanged = minutesChanged / 60;
+            
+            // turn minutes buffer into secnods
+            var buffer = alarmMgr.bufferTime[self.index]! * 60;
+            
+            // seconds to subtract from time of arrival
+            let negativeSeconds = -secondsChanged - buffer;
+            
+            //Get current time
+            let date = alarmMgr.timeOfArrival[self.index]!
+            let calendar = NSCalendar.currentCalendar()
+            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
+            
+            // break down date into units
+            let hour = components.hour - hoursChanged
+            let minutes = components.minute - minutesChanged
+            let seconds = components.second - secondsChanged;
+            
+            // print what time to arrive to console
+            println("you want to get there at \(date)");
+            
+            // subtract total time with traffic from time to arrive
+            let finalCal = NSCalendar.currentCalendar()
+            let finalDate = finalCal.dateByAddingUnit(.CalendarUnitSecond, value: negativeSeconds, toDate: date, options: nil)
+            
+            // print time to leave in date format to console
+            println("leave at \(finalDate)");
+            
+            // print time to leave in hours and minutes to console
+            println("must leave at \(hour):\(minutes)");
+            
+            // save time to leave
+            alarmMgr.timeCalculated[self.index] = finalDate;
+        }
+    }
+    
+    func saveFields() -> Void{
         alarmMgr.destination[index] = destination!.text;
         alarmMgr.bufferTime[index] = bufferTime!.text.toInt();
         alarmMgr.name[index] = alarmName!.text;
+    }
+    
+    func updateAlarm() -> Void{
+        let address = formatAddressForWeb(destination!.text);
         
-        getTraffic();
-        //vars
-        //println(alarmMgr.destination[index]);
-        //println(alarmMgr.timeOfArrival[index]);
-        //println(alarmMgr.bufferTime[index]);
+        // save fields
+        self.saveFields();
         
-        //alarmText!.text = alarmMgr.time[index]!;
+        // save destination coords
+        saveDestinationCoords(address).then{
+            // request traffic api
+            self.getTraffic().then {(route: NSDictionary) -> Void in
+                // if response is valid
+                self.saveTraffic(route);
+            }
+        }
+    }
+    
+    func isValidAddress(address : String){
+        
+    }
+    
+    func printAlarmDetails(index: Int){
+        println(alarmMgr.destination[index]);
+        println(alarmMgr.timeOfArrival[index]);
+        println(alarmMgr.bufferTime[index]);
+    }
+    
+    @IBAction func addAlarm(sender : UIButton){
+        
+        updateAlarm();
         
         //Check for traffic loop
-        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("getTraffic"), userInfo: nil, repeats: true)
+        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
         
         //Check for alarms loop
         alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
@@ -339,8 +374,7 @@ class DetailViewController: UIViewController {
         //defaults.setObject("crap", forKey: "string")
     }
     
-    func checkAlarm() {
-        //Get current time
+    func getCurrentTime() -> String{
         let date = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
@@ -353,49 +387,44 @@ class DetailViewController: UIViewController {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
         
         var strDate = dateFormatter.stringFromDate(date);
+        return strDate;
+    }
     
-        var todayDate = dateFormatter.dateFromString(strDate as String)
-        println(todayDate);
-        //println("Time planned \(alarmMgr.timeOfArrival[index]!)");
-        println("Time calculated \(alarmMgr.timeCalculated[index]!)");
-        //println("current date is \(strDate) current alarm is \(alarmMgr.time[index])");
-         //if (strDate != ""){
-         
+    func checkAlarm() {
+        //Get current time
+        let date = NSDate()
+        let currentTime = getCurrentTime();
         
         // Date comparision to compare current date and end date.
         var dateComparisionResult:NSComparisonResult = date.compare(alarmMgr.timeCalculated[index]!)
-        println("date is \(date) and time calculated is \(alarmMgr.timeCalculated[index]!)");
+        println("now is \(date) and time to leave is \(alarmMgr.timeCalculated[index]!)");
+        
+        // time to go
         if dateComparisionResult == NSComparisonResult.OrderedDescending
         {
-            println("greater than");
+            // turn off alarm intervals
             alarmMgr.alarm_scheduler[index]!.invalidate()
             alarmMgr.traffic_scheduler[index]!.invalidate()
             
-            //Notification
+            // push notification setup
             var localNotification:UILocalNotification = UILocalNotification()
             localNotification.alertBody = "Alarm went off"
             localNotification.fireDate = NSDate(timeIntervalSinceNow: 10)
-            //localNotification.soundName = UILocalNotificationDefaultSoundName
             localNotification.soundName = "alarm.mp3"
+            
+            // schedule push notification
             UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
             
-            func stopPlayer(){
-                audioPlayer.stop()
-            }
-            
-            var alertMsg = "Time to go!"
-            var alert: UIAlertView!
-            alert = UIAlertView(title: "", message: alertMsg, delegate: nil, cancelButtonTitle: "OK")
-            sleep(5)
-            alert.show()
-            
-            var uiAlert = UIAlertController(title: "Time to go!", message: "Message", preferredStyle: UIAlertControllerStyle.Alert)
-            self.presentViewController(uiAlert, animated: true, completion: nil)
-            
-            uiAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+            // configure alert message
+            var alertController = UIAlertController(title: "Time to go!", message: "Time to go!", preferredStyle: .Alert)
+            var okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) {
+                UIAlertAction in
                 self.audioPlayer.stop()
-            }))
-            
+            }
+            alertController.addAction(okAction)
+            UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
+        
+            // configure alert sound
             var alertSound = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("alarm", ofType: "mp3")!)
             
             // Removed deprecated use of AVAudioSessionDelegate protocol
@@ -408,35 +437,17 @@ class DetailViewController: UIViewController {
             audioPlayer.numberOfLoops = -1
             audioPlayer.play()
         }
+        // not time to leave yet
         else if dateComparisionResult == NSComparisonResult.OrderedAscending
         {
-            println("less than");
+            println("not time to leave yet");
 
         }
+        // times hit exact match
         else if dateComparisionResult == NSComparisonResult.OrderedSame
         {
-            println("same");
+            println("exact match");
         }
-        
-         //if (newDate == alarmMgr.timeCalculated[index]!){
-//            println("match");
-//            alarmMgr.alarm_scheduler[index]!.invalidate()
-//            alarmMgr.traffic_scheduler[index]!.invalidate()
-//            
-//            //Notification
-//            var localNotification:UILocalNotification = UILocalNotification()
-//            localNotification.alertBody = "Alarm went off"
-//            localNotification.fireDate = NSDate(timeIntervalSinceNow: 0)
-//            localNotification.soundName = UILocalNotificationDefaultSoundName
-//            //localNotification.soundName = "who_are_you.mp3"
-//            UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
-//
-//            var alertMsg = "Time to go!"
-//            var alert: UIAlertView!
-//            alert = UIAlertView(title: "", message: alertMsg, delegate: nil, cancelButtonTitle: "OK")
-//            alert.show()
-
-        //}
     }
     
     @IBAction func timeToArrive(sender: UITextField) {
