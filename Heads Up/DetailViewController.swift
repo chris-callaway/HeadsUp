@@ -180,38 +180,54 @@ class DetailViewController: UIViewController {
     
     //Convert address string to be HTML safe
     func formatAddressForWeb(address : String) -> String{
-        let toArraySpace = destination!.text.componentsSeparatedByString(" ")
-        let addressPhaseOne = join("+", toArraySpace)
-        let toArrayComma = addressPhaseOne.componentsSeparatedByString(",")
-        let addressHTML = join("", toArrayComma)
+        var addressHTML : String = "";
+        if (destination!.text != ""){
+            let toArraySpace = destination!.text.componentsSeparatedByString(" ")
+            let addressPhaseOne = join("+", toArraySpace)
+            let toArrayComma = addressPhaseOne.componentsSeparatedByString(",")
+            addressHTML = join("", toArrayComma)
+        }
         return addressHTML
     }
     
-    func saveDestinationCoords(address : String) -> Promise<Void> {
+    func saveDestinationCoords(address : String) -> Promise<Bool> {
         return Promise { fulfill, reject in
             self.HTTPGetJSON("http://maps.googleapis.com/maps/api/geocode/json?address=\(address)&sensor=false") {
                 (data: Dictionary<String, AnyObject>, error: String?) -> Void in
                 if (error != nil){
                     println(error)
                 } else {
-                    if let results = data["results"]![0] as? NSDictionary {
-                        if let geometry = results["geometry"] as? NSDictionary {
-                            if let location = geometry["location"] as? NSDictionary {
-                                var haveLat = false;
-                                var haveLng = false;
-                                if let lat = location["lat"] as? Float{
-                                    locationMgr.dest_lat = lat;
-                                    haveLat = true;
-                                }
-                                if let lng = location["lng"] as? Float{
-                                    locationMgr.dest_lng = lng;
-                                    haveLng = true;
-                                }
-                                if (haveLat && haveLng){
-                                    fulfill();
+                    if let check = data["status"] as? String{
+                        if (check == "ZERO_RESULTS"){
+                            println("invalid destination");
+                            fulfill(false);
+                        } else{
+                            if let results = data["results"]![0] as? NSDictionary {
+                                if let geometry = results["geometry"] as? NSDictionary {
+                                    if let location = geometry["location"] as? NSDictionary {
+                                        var haveLat = false;
+                                        var haveLng = false;
+                                        if let lat = location["lat"] as? Float{
+                                            locationMgr.dest_lat = lat;
+                                            haveLat = true;
+                                        }
+                                        if let lng = location["lng"] as? Float{
+                                            locationMgr.dest_lng = lng;
+                                            haveLng = true;
+                                        }
+                                        if (haveLat && haveLng){
+                                            fulfill(true);
+                                        } else{
+                                            fulfill(false);
+                                        }
+                                    } else{
+                                        fulfill(false);
+                                    }
                                 } else{
-                                    reject(NSError());
+                                    fulfill(false);
                                 }
+                            } else{
+                                fulfill(false);
                             }
                         }
                     }
@@ -228,7 +244,7 @@ class DetailViewController: UIViewController {
                 if (error != nil){
                     println(error)
                 } else {
-                    if let route = data["route"]! as? NSDictionary {
+                    if let route = data["route"] as? NSDictionary {
                         fulfill(route);
                     } else{
                         reject(NSError());
@@ -316,17 +332,55 @@ class DetailViewController: UIViewController {
         self.saveFields();
         
         // save destination coords
-        saveDestinationCoords(address).then{
-            // request traffic api
-            self.getTraffic().then {(route: NSDictionary) -> Void in
-                // if response is valid
-                self.saveTraffic(route);
+        saveDestinationCoords(address).then{ (valid: Bool) -> Void in
+            if (valid){
+                // request traffic api
+                self.getTraffic().then {(route: NSDictionary) -> Void in
+                    // if response is valid
+                    self.saveTraffic(route);
+                }
             }
         }
     }
     
-    func isValidAddress(address : String){
-        
+    func isValidAddress() -> Promise<Bool>{
+        return Promise { fulfill, reject in
+            let address = formatAddressForWeb(destination!.text);
+            println("http://maps.googleapis.com/maps/api/geocode/json?address=\(address)&sensor=false")
+            saveDestinationCoords(address).then{(valid: Bool) -> Void in
+                if (valid){
+                    self.HTTPGetJSON("http://maps.googleapis.com/maps/api/geocode/json?address=\(address)&sensor=false") {
+                        (data: Dictionary<String, AnyObject>, error: String?) -> Void in
+                        if (error != nil){
+                            println("found error is nil");
+                            fulfill(false);
+                        } else {
+                            println("about to get results");
+                            if let results = data["results"]![0] as? NSDictionary {
+                                if let geometry = results["geometry"] as? NSDictionary {
+                                    if let location = geometry["location"] as? NSDictionary {
+                                        println("fulfill");
+                                        fulfill(true);
+                                    } else{
+                                        println("reject");
+                                        fulfill(false);
+                                    }
+                                } else{
+                                    println("reject");
+                                    fulfill(false);
+                                }
+                            } else{
+                                println("reject");
+                                fulfill(false);
+                            }
+                        }
+                    }
+                } else{
+                    println("failed to save dest coords");
+                    fulfill(false);
+                }
+            }
+        }
     }
     
     func printAlarmDetails(index: Int){
@@ -337,16 +391,35 @@ class DetailViewController: UIViewController {
     
     @IBAction func addAlarm(sender : UIButton){
         
-        updateAlarm();
+        self.isValidAddress().then { (valid: Bool) -> Void in
+            println("valid \(valid)");
+            if (valid){
+                println("valid");
+                self.updateAlarm();
+                
+                //Check for traffic loop
+                alarmMgr.traffic_scheduler[self.index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
+                
+                //Check for alarms loop
+                alarmMgr.alarm_scheduler[self.index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
+                
+                self.view.endEditing(true);
+                self.navigationController?.popViewControllerAnimated(true)
+            } else {
+                println("invalid");
+            }
+        }
         
-        //Check for traffic loop
-        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
-        
-        //Check for alarms loop
-        alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
-        
-        self.view.endEditing(true);
-        self.navigationController?.popViewControllerAnimated(true)
+//        updateAlarm();
+//        
+//        //Check for traffic loop
+//        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
+//        
+//        //Check for alarms loop
+//        alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
+//        
+//        self.view.endEditing(true);
+//        self.navigationController?.popViewControllerAnimated(true)
         
         //let defaults = NSUserDefaults.standardUserDefaults()
         //defaults.setObject(alarmMgr.destination[index], forKey: "destination")
