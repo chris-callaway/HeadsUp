@@ -125,6 +125,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         alarmMgr.total_delay_time.append(nil);
         alarmMgr.total_time_seconds.append(nil);
         alarmMgr.name.append(nil);
+        alarmMgr.avoidTolls.append("true");
         
         if (objects.count >= 1){
             self.navigationItem.leftBarButtonItem = self.editButtonItem()
@@ -273,6 +274,10 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
             
             if ((alarmMgr.bufferTime[indexPath.row]) != nil){
                 alarmMgr.bufferTime.removeAtIndex(indexPath.row)
+            }
+            
+            if ((alarmMgr.avoidTolls[indexPath.row]) != nil){
+                alarmMgr.avoidTolls.removeAtIndex(indexPath.row)
             }
         
             println("Removed alarm");

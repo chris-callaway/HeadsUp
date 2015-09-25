@@ -20,7 +20,9 @@ class DetailViewController: UIViewController {
     @IBOutlet var timeOfArrival: UITextField?
     @IBOutlet var bufferTime: UITextField?
     @IBOutlet var alarmText: UITextField?
-    @IBOutlet var alarmName: UITextField?
+    @IBOutlet weak var alarmName: UITextField!
+    @IBOutlet weak var useTolls: UISwitch!
+    
     @IBOutlet weak var timeToArriveField: UITextField!
     
     @IBAction func mapButtonClicked(sender: AnyObject) {
@@ -90,6 +92,8 @@ class DetailViewController: UIViewController {
             var str = String(x)
             bufferTime!.text = str;
         }
+        //alarmMgr.avoidTolls[index] = "true";
+    
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -239,7 +243,7 @@ class DetailViewController: UIViewController {
     
     func getTraffic(Void) -> Promise<NSDictionary> {
         return Promise { fulfill, reject in
-            self.HTTPGetJSON("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6") {
+            self.HTTPGetJSON("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&avoidTolls=\(alarmMgr.avoidTolls[self.index]!)&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6") {
                 (data: Dictionary<String, AnyObject>, error: String?) -> Void in
                 if (error != nil){
                     println(error)
@@ -343,6 +347,14 @@ class DetailViewController: UIViewController {
         }
     }
     
+    @IBAction func tollsChanged(sender: AnyObject) {
+        if (useTolls.on){
+            alarmMgr.avoidTolls[self.index]! = "true";
+        } else{
+            alarmMgr.avoidTolls[self.index]! = "false";
+        }
+    }
+    
     func isValidAddress() -> Promise<Bool>{
         return Promise { fulfill, reject in
             let address = formatAddressForWeb(destination!.text);
@@ -397,10 +409,12 @@ class DetailViewController: UIViewController {
                 println("valid");
                 self.updateAlarm();
                 
-                //Check for traffic loop
+                self.deactivateAlarm();
+                
+                //Check for traffic api loop
                 alarmMgr.traffic_scheduler[self.index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
                 
-                //Check for alarms loop
+                //Check for alarm loop
                 alarmMgr.alarm_scheduler[self.index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
                 
                 self.view.endEditing(true);
@@ -409,17 +423,6 @@ class DetailViewController: UIViewController {
                 println("invalid");
             }
         }
-        
-//        updateAlarm();
-//        
-//        //Check for traffic loop
-//        alarmMgr.traffic_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(300.0, target: self, selector: Selector("updateAlarm"), userInfo: nil, repeats: true)
-//        
-//        //Check for alarms loop
-//        alarmMgr.alarm_scheduler[index] = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("checkAlarm"), userInfo: nil, repeats: true)
-//        
-//        self.view.endEditing(true);
-//        self.navigationController?.popViewControllerAnimated(true)
         
         //let defaults = NSUserDefaults.standardUserDefaults()
         //defaults.setObject(alarmMgr.destination[index], forKey: "destination")
@@ -443,8 +446,14 @@ class DetailViewController: UIViewController {
     }
     
     func deactivateAlarm() -> Void{
-        alarmMgr.alarm_scheduler[index]!.invalidate()
-        alarmMgr.traffic_scheduler[index]!.invalidate()
+        // stop alarm loop
+        if let alarmCheck = alarmMgr.alarm_scheduler[index]{
+            alarmMgr.alarm_scheduler[index]!.invalidate()
+        }
+        // stop hitting the traffic api
+        if let trafficCheck = alarmMgr.traffic_scheduler[index]{
+            alarmMgr.traffic_scheduler[index]!.invalidate()
+        }
     }
     
     func configurePushNotification() -> Void{

@@ -20,6 +20,7 @@ struct alarm{
     var total_delay_time = [];
     var total_time_seconds = [];
     var timeCalculated = [];
+    var avoidTolls = [];
     
     //Fields
     var name = [];
@@ -38,6 +39,7 @@ class Alarm: NSObject {
     var time_setting = " " as String;
     var total_delay_time = [Int?]()
     var total_time_seconds = [Int?]()
+    var avoidTolls = [String?]()
     
     //Fields
     var destination = [String?]()
