@@ -194,6 +194,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
                 if let element: NSDate = alarmMgr.timeOfArrival[indexPath.row] as? NSDate! {
                     var dateFormatter = NSDateFormatter();
                     dateFormatter.dateFormat = "hh:mm"
+                    dateFormatter.timeZone = NSTimeZone.localTimeZone()
                     var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[indexPath.row]!);
                     
                     if let label = cell.viewWithTag(100) as? UILabel {

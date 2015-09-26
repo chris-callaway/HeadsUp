@@ -26,6 +26,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var timeToArriveField: UITextField!
     
     @IBAction func mapButtonClicked(sender: AnyObject) {
+        println("map clicked");
+        UIApplication.sharedApplication().openURL(NSURL(string : directionsUrl())!)
 //        performSegueWithIdentifier("mapView", sender: self)
     }
     
@@ -103,6 +105,16 @@ class DetailViewController: UIViewController {
     func textFieldShouldReturn(textField: UITextField!) -> Bool{
         textField.resignFirstResponder();
         return true;
+    }
+    
+    func directionsUrl() -> String{
+        var url : String;
+        if (alarmMgr.avoidTolls[self.index]! == "true"){
+            url = "https://maps.google.com?saddr=Current+Location&daddr=\(formatAddressForWeb(destination!.text))&mode=driving&dirflg=t";
+        } else{
+            url = "https://maps.google.com?saddr=Current+Location&daddr=\(formatAddressForWeb(destination!.text))&mode=driving";
+        }
+        return url;
     }
 
     override func didReceiveMemoryWarning() {
@@ -242,13 +254,23 @@ class DetailViewController: UIViewController {
     }
     
     func getTraffic(Void) -> Promise<NSDictionary> {
+        var url : String;
+        if (alarmMgr.avoidTolls[self.index] == "true"){
+            url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(locationMgr.user_lat),\(locationMgr.user_lng)&destination=\(locationMgr.dest_lat),\(locationMgr.dest_lng)&avoid=tolls&mode=driving&duration_in_traffic=true&key=AIzaSyD0NCpm0dDaOZ46XDR82YXR0ReJHa8oOo8";
+        } else{
+            url = "https://maps.googleapis.com/maps/api/directions/json?origin=\(locationMgr.user_lat),\(locationMgr.user_lng)&destination=\(locationMgr.dest_lat),\(locationMgr.dest_lng)&mode=driving&duration_in_traffic=true&key=AIzaSyD0NCpm0dDaOZ46XDR82YXR0ReJHa8oOo8";
+        }
+        
+        println("getting traffic at \(url)");
         return Promise { fulfill, reject in
-            self.HTTPGetJSON("https://api.tomtom.com/lbs/services/route/3/\(locationMgr.user_lat),\(locationMgr.user_lng):\(locationMgr.dest_lat),\(locationMgr.dest_lng)/Quickest/json?avoidTraffic=true&includeTraffic=true&avoidTolls=\(alarmMgr.avoidTolls[self.index]!)&language=en&day=today&key=6havbcb5nqy2upzc449gj7j6") {
+            self.HTTPGetJSON(url) {
                 (data: Dictionary<String, AnyObject>, error: String?) -> Void in
                 if (error != nil){
                     println(error)
                 } else {
-                    if let route = data["route"] as? NSDictionary {
+                    println("data is here \(data)");
+                    if let route = data["routes"]![0] as? NSDictionary {
+                        println("route exists");
                         fulfill(route);
                     } else{
                         reject(NSError());
@@ -266,21 +288,25 @@ class DetailViewController: UIViewController {
     }
     
     func saveTraffic(route: NSDictionary) -> Void{
-        if let summary = route["summary"] as? NSDictionary {
-            
+        println("about to save traffic");
+        if let summary = route["legs"]![0] as? NSDictionary {
+            println("savings traffic");
             // total delay in seconds
-            if let totalDelaySeconds = summary["totalDelaySeconds"] as! Int! {
-                println("delay exists");
-                alarmMgr.total_delay_time[self.index] = totalDelaySeconds;
+            if let duration = summary["duration"] as? NSDictionary! {
+                println("has distance");
+                if let totalTime = duration["value"] as! Int! {
+                    println("received total time \(totalTime)");
+                    alarmMgr.total_time_seconds[self.index] = totalTime;
+                }
             }
             
             // total time in seconds
-            if let totalTimeSeconds = summary["totalTimeSeconds"] as? Int {
-                alarmMgr.total_time_seconds[self.index] = totalTimeSeconds;
-            }
+//            if let totalTimeSeconds = summary["totalTimeSeconds"] as? Int {
+//                alarmMgr.total_time_seconds[self.index] = totalTimeSeconds;
+//            }
             
             // calculate total time including traffic and time needed to get ready
-            var totalTimeWithDelay = alarmMgr.total_delay_time[self.index]! + alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
+            var totalTimeWithDelay = alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
             
             printTotalTimeDetails(totalTimeWithDelay);
             
@@ -294,11 +320,22 @@ class DetailViewController: UIViewController {
             
             // seconds to subtract from time of arrival
             let negativeSeconds = -secondsChanged - buffer;
+            println("seconds to subtract \(negativeSeconds)");
             
             //Get current time
             let date = alarmMgr.timeOfArrival[self.index]!
+            var dateFormatter = NSDateFormatter()
+            dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+            dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
+            dateFormatter.timeZone = NSTimeZone(name: "GMT")
+            //dateFormatter.locale =  NSLocale(localeIdentifier: "en_US_POSIX")
+            let strDate = dateFormatter.stringFromDate(date)
+            let newDate = dateFormatter.dateFromString(strDate)
+            //date.timeZone = NSTimeZone.systemTimeZone()
+
             let calendar = NSCalendar.currentCalendar()
-            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
+            let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: newDate!)
             
             // break down date into units
             let hour = components.hour - hoursChanged
@@ -306,12 +343,15 @@ class DetailViewController: UIViewController {
             let seconds = components.second - secondsChanged;
             
             // print what time to arrive to console
-            println("you want to get there at \(date)");
+            println("you want to get there at \(alarmMgr.timeOfArrival[index])");
             
             // subtract total time with traffic from time to arrive
             let finalCal = NSCalendar.currentCalendar()
-            let finalDate = finalCal.dateByAddingUnit(.CalendarUnitSecond, value: negativeSeconds, toDate: date, options: nil)
+            finalCal.timeZone = NSTimeZone(name: "GMT")!
+        
             
+            let finalDate = finalCal.dateByAddingUnit(.CalendarUnitSecond, value: negativeSeconds, toDate: newDate!, options: nil)
+    
             // print time to leave in date format to console
             println("leave at \(finalDate)");
             
@@ -319,7 +359,12 @@ class DetailViewController: UIViewController {
             println("must leave at \(hour):\(minutes)");
             
             // save time to leave
-            alarmMgr.timeCalculated[self.index] = finalDate;
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            dateFormatter.timeZone = NSTimeZone(name: "GMT")
+            var dateString2 = dateFormatter.stringFromDate(finalDate!);
+            var date2 = dateFormatter.dateFromString(dateString2);
+                
+            alarmMgr.timeCalculated[self.index] = date2;
         }
     }
     
@@ -429,20 +474,22 @@ class DetailViewController: UIViewController {
         //defaults.setObject("crap", forKey: "string")
     }
     
-    func getCurrentTime() -> String{
+    func getCurrentTime() -> NSDate{
         let date = NSDate()
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components(.CalendarUnitHour | .CalendarUnitMinute, fromDate: date)
         let hour = components.hour
         let minutes = components.minute
         var dateFormatter = NSDateFormatter()
-        
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss" // superset of OP's format
+        dateFormatter.timeZone = NSTimeZone(name: "GMT")
+        //dateFormatter.locale =  NSLocale(localeIdentifier: "en_US_POSIX")
+        let strDate = dateFormatter.stringFromDate(date)
         
-        var strDate = dateFormatter.stringFromDate(date);
-        return strDate;
+        var newDate = dateFormatter.dateFromString(strDate);
+        return newDate!;
     }
     
     func deactivateAlarm() -> Void{
@@ -504,8 +551,8 @@ class DetailViewController: UIViewController {
         let currentTime = getCurrentTime();
         
         // Date comparision to compare current date and end date.
-        var dateComparisionResult:NSComparisonResult = date.compare(alarmMgr.timeCalculated[index]!)
-        println("now is \(date) and time to leave is \(alarmMgr.timeCalculated[index]!)");
+        var dateComparisionResult:NSComparisonResult = currentTime.compare(alarmMgr.timeCalculated[index]!)
+        println("now is \(currentTime) and time to leave is \(alarmMgr.timeCalculated[index]!)");
         
         switch (dateComparisionResult){
             // time to go
@@ -527,7 +574,7 @@ class DetailViewController: UIViewController {
     @IBAction func timeToArrive(sender: UITextField) {
         
         myDatePicker.datePickerMode = UIDatePickerMode.Time
-        
+
         setTimeOfArrivalUI();
         
         //Create the view
@@ -553,26 +600,49 @@ class DetailViewController: UIViewController {
     
     func setTimeOfArrivalUI() -> Void{
         myDatePicker.addTarget(self, action: Selector("datePickerChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        var dateFormatter = NSDateFormatter();
+        dateFormatter.dateFormat = "hh:mm a"
+        dateFormatter.timeZone = NSTimeZone(name: "GMT")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        var dateString = dateFormatter.stringFromDate(myDatePicker.date);
+        println("date string is \(dateString)");
+        
         if (alarmMgr.timeOfArrival[index] != nil){
-            myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
+//            myDatePicker.timeZone = NSTimeZone.localTimeZone()
+            println("setting date \(dateString)");
+            
+            //myDatePicker.setDate(alarmMgr.timeOfArrival[index]!, animated: true);
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            dateFormatter.timeZone = NSTimeZone(name: "GMT")
+            var dateString2 = dateFormatter.stringFromDate(myDatePicker.date);
+            var date2 = dateFormatter.dateFromString(dateString);
+            alarmMgr.timeOfArrival[index] = date2
+            println("about to save date \(dateString)");
+            println("saving date \(alarmMgr.timeOfArrival[index]!)");
         }
     }
     
     func saveTimeOfArrival() -> Void{
         // save time of arrival
-        if let item = alarmMgr.timeOfArrival[index] {
-            alarmMgr.timeOfArrival[index] = myDatePicker.date
-        }
+//        if let item = alarmMgr.timeOfArrival[index] {
+//            println("saving date \(myDatePicker.date)");
+//            alarmMgr.timeOfArrival[index] = myDatePicker.date
+//            println("time to get there is \(alarmMgr.timeOfArrival[index])");
+//        }
     }
     
     func populateDateField(date : NSDate){
+        println("populating date text field");
         var dateFormatter = NSDateFormatter();
         dateFormatter.dateFormat = "hh:mm a"
-        var dateString = dateFormatter.stringFromDate(date);
+        dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        var dateString = dateFormatter.stringFromDate(myDatePicker.date);
+        println("populated with \(dateString)");
         timeToArriveField.text = dateString;
     }
     
     @IBAction func endedAddingDate(sender: UITextField) {
+        println("ended adding date");
         setTimeOfArrivalUI();
         saveTimeOfArrival();
         populateDateField(alarmMgr.timeOfArrival[index]!);
@@ -584,12 +654,14 @@ class DetailViewController: UIViewController {
         println("total alarms \(totalAlarms)");
     }
     
+    // datepicker opened, apply styling format
     func datePickerValueChanged(sender:UIDatePicker) {
         var dateFormatter = NSDateFormatter()
         var strDate = dateFormatter.stringFromDate(myDatePicker.date)
         dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
         dateFormatter.dateFormat = "yyyy-MM-dd 'at' h:mm a" // superset of OP's format
+        println("datepicker changed");
     }
     
     func doneButton(sender:UIButton)
