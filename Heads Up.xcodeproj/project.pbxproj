@@ -24,6 +24,8 @@
 		9C837DDA1ADB628F0047D4E9 /* HTTPResponseSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DD91ADB628F0047D4E9 /* HTTPResponseSerializer.swift */; };
 		9C837DDC1ADB629F0047D4E9 /* HTTPRequestSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDB1ADB629F0047D4E9 /* HTTPRequestSerializer.swift */; };
 		9C837DDE1ADB62AC0047D4E9 /* HTTPUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C837DDD1ADB62AC0047D4E9 /* HTTPUpload.swift */; };
+		CE31E4F11BB62B57003591B2 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE31E4EF1BB62B57003591B2 /* Model.xcdatamodeld */; };
+		CE31E4F31BB62B79003591B2 /* LogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE31E4F21BB62B79003591B2 /* LogItem.swift */; };
 		CECB04C71BAB43DA00FCBFAB /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */; };
 		CECB04C91BAB6EEF00FCBFAB /* mapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECB04C81BAB6EEF00FCBFAB /* mapViewController.swift */; };
 /* End PBXBuildFile section */
@@ -63,6 +65,8 @@
 		9EFAB393A2FCD5695657731F /* Pods-Heads Up.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Heads Up.release.xcconfig"; path = "Pods/Target Support Files/Pods-Heads Up/Pods-Heads Up.release.xcconfig"; sourceTree = "<group>"; };
 		AEB3DDFD169C1F1BCFB35E9E /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5456255FA4CEB1E322E8A0B /* Pods_Heads_Up.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Heads_Up.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE31E4F01BB62B57003591B2 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		CE31E4F21BB62B79003591B2 /* LogItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogItem.swift; sourceTree = "<group>"; };
 		CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		CECB04C81BAB6EEF00FCBFAB /* mapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapViewController.swift; sourceTree = "<group>"; };
 		F55D0B0F3D0F20CFF05004C4 /* Pods-Heads UpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Heads UpTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Heads UpTests/Pods-Heads UpTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 		9C3C365F1AD9E154004549CE /* Heads Up */ = {
 			isa = PBXGroup;
 			children = (
+				CE31E4F21BB62B79003591B2 /* LogItem.swift */,
 				9C7CA95D1B30ED0C00984FBF /* alarm.mp3 */,
 				9C3C36621AD9E154004549CE /* AppDelegate.swift */,
 				9C3C36641AD9E154004549CE /* MasterViewController.swift */,
@@ -139,6 +144,7 @@
 				9C3C36601AD9E154004549CE /* Supporting Files */,
 				CECB04C61BAB43DA00FCBFAB /* CustomTableViewCell.swift */,
 				CECB04C81BAB6EEF00FCBFAB /* mapViewController.swift */,
+				CE31E4EF1BB62B57003591B2 /* Model.xcdatamodeld */,
 			);
 			path = "Heads Up";
 			sourceTree = "<group>";
@@ -392,9 +398,11 @@
 				9C3C36631AD9E154004549CE /* AppDelegate.swift in Sources */,
 				CECB04C71BAB43DA00FCBFAB /* CustomTableViewCell.swift in Sources */,
 				CECB04C91BAB6EEF00FCBFAB /* mapViewController.swift in Sources */,
+				CE31E4F31BB62B79003591B2 /* LogItem.swift in Sources */,
 				9C3C36851AD9ED71004549CE /* Alarm.swift in Sources */,
 				9C837DDE1ADB62AC0047D4E9 /* HTTPUpload.swift in Sources */,
 				9C837DDA1ADB628F0047D4E9 /* HTTPResponseSerializer.swift in Sources */,
+				CE31E4F11BB62B57003591B2 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -613,6 +621,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CE31E4EF1BB62B57003591B2 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CE31E4F01BB62B57003591B2 /* Model.xcdatamodel */,
+			);
+			currentVersion = CE31E4F01BB62B57003591B2 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 9C3C36551AD9E154004549CE /* Project object */;
 }

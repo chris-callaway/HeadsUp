@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import Foundation
 import AVFoundation
+import CoreData
 
 class CustomTableViewCell: UITableViewCell {
 
@@ -34,8 +35,11 @@ class CustomTableViewCell: UITableViewCell {
 }
 
 class MasterViewController: UITableViewController, CLLocationManagerDelegate {
-    
+
     var objects = [AnyObject]()
+    
+    // Retreive the managedObjectContext from AppDelegate
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
     
     var latitude: Float = Float();
     var longitude: Float = Float();
@@ -48,7 +52,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         tableView.delegate = self
         tableView.dataSource = self
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -82,7 +86,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
         if (objects.count > 1){
             self.navigationItem.leftBarButtonItem = self.editButtonItem()
             self.navigationItem.leftBarButtonItem?.tintColor = UIColor.whiteColor()
-        }
+        }        
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -288,6 +292,10 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
                 self.navigationItem.leftBarButtonItem = nil
                 self.navigationItem.leftBarButtonItem?.tintColor = nil
             }
+            
+            DetailViewController().deleteAllObjectsForEntityWithName("LogItem");
+            DetailViewController().saveNewItem(alarmMgr);
+            DetailViewController().save();
             
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.

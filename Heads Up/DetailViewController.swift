@@ -11,9 +11,18 @@ import Foundation
 import AVFoundation
 import SpriteKit
 import PromiseKit
+import CoreData
 
 class DetailViewController: UIViewController {
 
+    // Create an empty array of LogItem's
+    var logItems = [LogItem]()
+    
+    class var applicationDocumentDirectory: NSURL {
+        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        return urls[urls.endIndex - 1] as! NSURL
+    }
+    
     @IBOutlet weak var detailDescriptionLabel: UILabel!
     //@IBOutlet weak var myDatePicker: UIDatePicker!
     @IBOutlet var destination: UITextField?
@@ -30,6 +39,12 @@ class DetailViewController: UIViewController {
         UIApplication.sharedApplication().openURL(NSURL(string : directionsUrl())!)
 //        performSegueWithIdentifier("mapView", sender: self)
     }
+    
+    // Retreive the managedObjectContext from AppDelegate
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    
+    // Create the table view as soon as this class loads
+    var logTableView = UITableView(frame: CGRectZero, style: .Plain)
     
     var myDatePicker:UIDatePicker = UIDatePicker()
     
@@ -95,11 +110,103 @@ class DetailViewController: UIViewController {
             bufferTime!.text = str;
         }
         //alarmMgr.avoidTolls[index] = "true";
+        
+
+    }
     
+    func save() {
+        var error : NSError?
+        if(managedObjectContext!.save(&error) ) {
+            println(error?.localizedDescription)
+        }
+    }
+    
+    func fetchLog() {
+        let fetchRequest = NSFetchRequest(entityName: "LogItem")
+        fetchRequest.returnsObjectsAsFaults = false
+        // Create a sort descriptor object that sorts on the "title"
+        // property of the Core Data object
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        
+        // Set the list of sort descriptors in the fetch request,
+        // so it includes the sort descriptor
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let fetchResults = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil) as? [LogItem] {
+            logItems = fetchResults
+        }
+    }
+    
+    func deleteAllObjectsForEntityWithName(name: String) {
+        
+        println("deleting all objects in entity \(name)")
+        var fetchRequest = NSFetchRequest(entityName: name)
+        if let ManagedObjectContext = self.managedObjectContext {
+            var error: NSError? = nil
+            let objectIDs = ManagedObjectContext.executeFetchRequest(fetchRequest, error: &error)
+            for objectID in objectIDs! {
+                
+                ManagedObjectContext.deleteObject(objectID as! NSManagedObject)
+            }
+            println("All objects in entity \(name) deleted")
+        }
+    }
+    
+    func saveNewItem(alarm : Alarm) {
+        // Create the new  log item
+        var newLogItem = LogItem.createInManagedObjectContext(self.managedObjectContext!, alarm: alarm, indexPath: 0)
+        // Update the array containing the table view row data
+        self.fetchLog()
+        for (var i = 0; i < count(alarmMgr.name); i++){
+            if let newItemIndex = find(logItems, newLogItem[i]) {
+                // Create an NSIndexPath from the newItemIndex
+                let newLogItemIndexPath = NSIndexPath(forRow: newItemIndex, inSection: 0)
+                // Animate in the insertion of this row
+                logTableView.insertRowsAtIndexPaths([ newLogItemIndexPath ], withRowAnimation: .Automatic)
+            }
+        }
+    }
+    
+    func updateFromDb() -> Void {
+        let fetchRequest = NSFetchRequest(entityName: "LogItem")
+        fetchRequest.returnsObjectsAsFaults = false
+        if let results: NSArray = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil){
+            for var i = 0; i < results.count; i++ {
+                let name = results[i].valueForKey("name") as? String
+                println("name is \(name!)");
+                
+                if let alarmName = (alarmMgr.name.count > i ? alarmMgr.name[i] : nil) as String?{
+                    alarmMgr.name[i] = name!
+                }
+                
+            }
+        }
+    }
+    
+    func populateUI() -> Void {
+        if (alarmMgr.name[index] != nil){
+            alarmName!.text = alarmMgr.name[index];
+        }
+        if (alarmMgr.destination[index] != nil){
+            destination!.text = alarmMgr.destination[index];
+        }
+        if (alarmMgr.timeOfArrival[index] != nil && alarmMgr.name[index] != nil){
+            var dateFormatter = NSDateFormatter();
+            dateFormatter.dateFormat = "hh:mm a"
+            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+            timeToArriveField.text = dateString;
+        }
+        if (alarmMgr.bufferTime[index] != nil){
+            let x : Int = alarmMgr.bufferTime[index]!
+            var str = String(x)
+            bufferTime!.text = str;
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        updateFromDb();
+        populateUI();
     }
     
     func textFieldShouldReturn(textField: UITextField!) -> Bool{
@@ -387,6 +494,9 @@ class DetailViewController: UIViewController {
                 self.getTraffic().then {(route: NSDictionary) -> Void in
                     // if response is valid
                     self.saveTraffic(route);
+                    self.deleteAllObjectsForEntityWithName("LogItem");
+                    self.saveNewItem(alarmMgr);
+                    self.save();
                 }
             }
         }
@@ -444,6 +554,11 @@ class DetailViewController: UIViewController {
         println(alarmMgr.destination[index]);
         println(alarmMgr.timeOfArrival[index]);
         println(alarmMgr.bufferTime[index]);
+    }
+    
+    func appDelegate () -> AppDelegate
+    {
+        return UIApplication.sharedApplication().delegate as! AppDelegate
     }
     
     @IBAction func addAlarm(sender : UIButton){
