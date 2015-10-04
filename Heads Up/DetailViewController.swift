@@ -90,22 +90,22 @@ class DetailViewController: UIViewController {
         self.configureView()
         
         // set initial values
-        alarmMgr.name[index] = "";
+        //alarmMgr.name[index] = "";
         
-        if (alarmMgr.name[index] != nil){
+        if (alarmMgr.name[index] != ""){
             alarmName!.text = alarmMgr.name[index];
         }
-        if (alarmMgr.destination[index] != nil){
+        if (alarmMgr.destination[index] != ""){
             destination!.text = alarmMgr.destination[index];
         }
-        if (alarmMgr.timeOfArrival[index] != nil && alarmMgr.name[index] != nil){
+        if (alarmMgr.timeOfArrival[index] != [] && alarmMgr.name[index] != ""){
             var dateFormatter = NSDateFormatter();
             dateFormatter.dateFormat = "hh:mm a"
-            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]);
             timeToArriveField.text = dateString;
         }
-        if (alarmMgr.bufferTime[index] != nil){
-            let x : Int = alarmMgr.bufferTime[index]!
+        if (count(alarmMgr.bufferTime) >= index){
+            let x : Int = alarmMgr.bufferTime[index]
             var str = String(x)
             bufferTime!.text = str;
         }
@@ -173,10 +173,75 @@ class DetailViewController: UIViewController {
         if let results: NSArray = managedObjectContext!.executeFetchRequest(fetchRequest, error: nil){
             for var i = 0; i < results.count; i++ {
                 let name = results[i].valueForKey("name") as? String
-                println("name is \(name!)");
+//                let alarmScheduler = results[i].valueForKey("alarm_scheduler") as? NSTimer
+//                let trafficScheduler = results[i].valueForKey("traffic_scheduler") as? NSTimer
+                let totalDelayTime = results[i].valueForKey("total_delay_time") as? Int
+                let totalTimeSeconds = results[i].valueForKey("total_time_seconds") as? Int
+                let avoidTolls = results[i].valueForKey("avoidTolls") as? String
+//                let destination = results[i].valueForKey("destination") as? String
+                let timeOfArrival = results[i].valueForKey("timeOfArrival") as? NSDate
+                let bufferTime = results[i].valueForKey("bufferTime") as? Int
+                let timeCalculated = results[i].valueForKey("timeCalculated") as? NSDate
                 
+                println("update - name is \(name!)");
+//                println("update - alarm scheduler is \(alarmScheduler!)");
+//                println("update - traffic scheduler is \(trafficScheduler!)");
+                println("update - totalDelayTime is \(totalDelayTime!)");
+                println("update - avoidTolls is \(avoidTolls!)");
+//                println("update - destination is \(destination!)");
+                println("update - bufferTime is \(bufferTime!)");
+                println("update - timeCalculated is \(timeCalculated!)");
+                println("update - time of arrival is \(timeOfArrival!)");
+                
+                
+                // update name
                 if let alarmName = (alarmMgr.name.count > i ? alarmMgr.name[i] : nil) as String?{
                     alarmMgr.name[i] = name!
+                }
+                
+                // update alarm scheduler
+//                if let alarmAlarmScheduler = (alarmMgr.alarm_scheduler.count > i ? alarmMgr.alarm_scheduler[i] : nil) as NSTimer?{
+//                    alarmMgr.alarm_scheduler[i] = alarmScheduler!
+//                }
+//                
+//                // update traffic scheduler
+//                if let alarmTrafficScheduler = (alarmMgr.traffic_scheduler.count > i ? alarmMgr.traffic_scheduler[i] : nil) as NSTimer?{
+//                    alarmMgr.traffic_scheduler[i] = trafficScheduler!
+//                }
+                
+                // update total delay time
+//                if let alarmTotalDelayTime = (alarmMgr.total_delay_time.count > i ? alarmMgr.total_delay_time[i] : nil) as Int?{
+//                    alarmMgr.total_delay_time[i] = totalDelayTime!
+//                }
+                
+                // update total time seconds
+//                if let alarmTotalDelayTime = (alarmMgr.total_time_seconds.count > i ? alarmMgr.total_time_seconds[i] : nil) as Int?{
+//                    alarmMgr.total_time_seconds[i] = totalTimeSeconds!
+//                }
+                
+                // update avoid tolls
+                if let alarmAvoidTolls = (alarmMgr.avoidTolls.count > i ? alarmMgr.avoidTolls[i] : nil) as String?{
+                    alarmMgr.avoidTolls[i] = avoidTolls!
+                }
+                
+                // update destination
+//                if let alarmDestination = (alarmMgr.destination.count > i ? alarmMgr.destination[i] : nil) as String?{
+//                    alarmMgr.destination[i] = destination!
+//                }
+                
+                // update time of arrival
+                if let alarmTimeOfArrival = (alarmMgr.timeOfArrival.count > i ? alarmMgr.timeOfArrival[i] : nil) as NSDate?{
+                    alarmMgr.timeOfArrival[i] = timeOfArrival!
+                }
+                
+                // update buffer time
+                if let alarmBufferTime = (alarmMgr.bufferTime.count > i ? alarmMgr.bufferTime[i] : nil) as Int?{
+                    alarmMgr.bufferTime[i] = bufferTime!
+                }
+                
+                // update time calculated
+                if let alarmTimeCalculated = (alarmMgr.timeCalculated.count > i ? alarmMgr.timeCalculated[i] : nil) as NSDate?{
+                    alarmMgr.timeCalculated[i] = timeCalculated!
                 }
                 
             }
@@ -184,20 +249,20 @@ class DetailViewController: UIViewController {
     }
     
     func populateUI() -> Void {
-        if (alarmMgr.name[index] != nil){
+        if (alarmMgr.name[index] != ""){
             alarmName!.text = alarmMgr.name[index];
         }
-        if (alarmMgr.destination[index] != nil){
+        if (alarmMgr.destination[index] != ""){
             destination!.text = alarmMgr.destination[index];
         }
-        if (alarmMgr.timeOfArrival[index] != nil && alarmMgr.name[index] != nil){
+        if (alarmMgr.timeOfArrival[index] != [] && alarmMgr.name[index] != ""){
             var dateFormatter = NSDateFormatter();
             dateFormatter.dateFormat = "hh:mm a"
-            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]!);
+            var dateString = dateFormatter.stringFromDate(alarmMgr.timeOfArrival[index]);
             timeToArriveField.text = dateString;
         }
-        if (alarmMgr.bufferTime[index] != nil){
-            let x : Int = alarmMgr.bufferTime[index]!
+        if (count(alarmMgr.bufferTime) >= index){
+            let x : Int = alarmMgr.bufferTime[index]
             var str = String(x)
             bufferTime!.text = str;
         }
@@ -205,7 +270,7 @@ class DetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        updateFromDb();
+        //updateFromDb();
         populateUI();
     }
     
@@ -216,7 +281,7 @@ class DetailViewController: UIViewController {
     
     func directionsUrl() -> String{
         var url : String;
-        if (alarmMgr.avoidTolls[self.index]! == "true"){
+        if (alarmMgr.avoidTolls[self.index] == "true"){
             url = "https://maps.google.com?saddr=Current+Location&daddr=\(formatAddressForWeb(destination!.text))&mode=driving&dirflg=t";
         } else{
             url = "https://maps.google.com?saddr=Current+Location&daddr=\(formatAddressForWeb(destination!.text))&mode=driving";
@@ -413,7 +478,7 @@ class DetailViewController: UIViewController {
 //            }
             
             // calculate total time including traffic and time needed to get ready
-            var totalTimeWithDelay = alarmMgr.total_time_seconds[self.index]! + alarmMgr.bufferTime[self.index]!;
+            var totalTimeWithDelay = alarmMgr.total_time_seconds[self.index] + alarmMgr.bufferTime[self.index];
             
             printTotalTimeDetails(totalTimeWithDelay);
             
@@ -423,14 +488,14 @@ class DetailViewController: UIViewController {
             var hoursChanged = minutesChanged / 60;
             
             // turn minutes buffer into secnods
-            var buffer = alarmMgr.bufferTime[self.index]! * 60;
+            var buffer = alarmMgr.bufferTime[self.index] * 60;
             
             // seconds to subtract from time of arrival
             let negativeSeconds = -secondsChanged - buffer;
             println("seconds to subtract \(negativeSeconds)");
             
             //Get current time
-            let date = alarmMgr.timeOfArrival[self.index]!
+            let date = alarmMgr.timeOfArrival[self.index]
             var dateFormatter = NSDateFormatter()
             dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
             dateFormatter.timeStyle = NSDateFormatterStyle.FullStyle
@@ -471,13 +536,13 @@ class DetailViewController: UIViewController {
             var dateString2 = dateFormatter.stringFromDate(finalDate!);
             var date2 = dateFormatter.dateFromString(dateString2);
                 
-            alarmMgr.timeCalculated[self.index] = date2;
+            alarmMgr.timeCalculated[self.index] = date2!;
         }
     }
     
     func saveFields() -> Void{
         alarmMgr.destination[index] = destination!.text;
-        alarmMgr.bufferTime[index] = bufferTime!.text.toInt();
+        alarmMgr.bufferTime[index] = bufferTime!.text.toInt()!;
         alarmMgr.name[index] = alarmName!.text;
     }
     
@@ -494,9 +559,14 @@ class DetailViewController: UIViewController {
                 self.getTraffic().then {(route: NSDictionary) -> Void in
                     // if response is valid
                     self.saveTraffic(route);
-                    self.deleteAllObjectsForEntityWithName("LogItem");
-                    self.saveNewItem(alarmMgr);
-                    self.save();
+                    alarmMgr.saveAlarms(alarmMgr)
+                    
+//                    let names: [String] = alarmMgr.retrievedName() as! [String]
+//                    println("returning names as \(names)");
+//                    
+//                    let timeOfArrival: [NSDate] = alarmMgr.retrievedTimeofArrival() as! [NSDate]
+//                    println("returning time of arrival as \(timeOfArrival)");
+
                 }
             }
         }
@@ -504,9 +574,9 @@ class DetailViewController: UIViewController {
     
     @IBAction func tollsChanged(sender: AnyObject) {
         if (useTolls.on){
-            alarmMgr.avoidTolls[self.index]! = "true";
+            alarmMgr.avoidTolls[self.index] = "true";
         } else{
-            alarmMgr.avoidTolls[self.index]! = "false";
+            alarmMgr.avoidTolls[self.index] = "false";
         }
     }
     
@@ -568,7 +638,7 @@ class DetailViewController: UIViewController {
             if (valid){
                 println("valid");
                 self.updateAlarm();
-                
+                println("updated alarm and arrival is \(alarmMgr.timeOfArrival[self.index])");
                 self.deactivateAlarm();
                 
                 //Check for traffic api loop
@@ -609,12 +679,12 @@ class DetailViewController: UIViewController {
     
     func deactivateAlarm() -> Void{
         // stop alarm loop
-        if let alarmCheck = alarmMgr.alarm_scheduler[index]{
-            alarmMgr.alarm_scheduler[index]!.invalidate()
+        if let alarmCheck = alarmMgr.alarm_scheduler[index] as? NSTimer{
+            alarmMgr.alarm_scheduler[index].invalidate()
         }
         // stop hitting the traffic api
-        if let trafficCheck = alarmMgr.traffic_scheduler[index]{
-            alarmMgr.traffic_scheduler[index]!.invalidate()
+        if let trafficCheck = alarmMgr.traffic_scheduler[index] as? NSTimer{
+            alarmMgr.traffic_scheduler[index].invalidate()
         }
     }
     
@@ -666,8 +736,8 @@ class DetailViewController: UIViewController {
         let currentTime = getCurrentTime();
         
         // Date comparision to compare current date and end date.
-        var dateComparisionResult:NSComparisonResult = currentTime.compare(alarmMgr.timeCalculated[index]!)
-        println("now is \(currentTime) and time to leave is \(alarmMgr.timeCalculated[index]!)");
+        var dateComparisionResult:NSComparisonResult = currentTime.compare(alarmMgr.timeCalculated[index])
+        println("now is \(currentTime) and time to leave is \(alarmMgr.timeCalculated[index])");
         
         switch (dateComparisionResult){
             // time to go
@@ -722,7 +792,7 @@ class DetailViewController: UIViewController {
         var dateString = dateFormatter.stringFromDate(myDatePicker.date);
         println("date string is \(dateString)");
         
-        if (alarmMgr.timeOfArrival[index] != nil){
+        if (alarmMgr.timeOfArrival[index] != []){
 //            myDatePicker.timeZone = NSTimeZone.localTimeZone()
             println("setting date \(dateString)");
             
@@ -731,9 +801,9 @@ class DetailViewController: UIViewController {
             dateFormatter.timeZone = NSTimeZone(name: "GMT")
             var dateString2 = dateFormatter.stringFromDate(myDatePicker.date);
             var date2 = dateFormatter.dateFromString(dateString);
-            alarmMgr.timeOfArrival[index] = date2
+            alarmMgr.timeOfArrival[index] = date2!
             println("about to save date \(dateString)");
-            println("saving date \(alarmMgr.timeOfArrival[index]!)");
+            println("saving date \(alarmMgr.timeOfArrival[index])");
         }
     }
     
@@ -760,7 +830,7 @@ class DetailViewController: UIViewController {
         println("ended adding date");
         setTimeOfArrivalUI();
         saveTimeOfArrival();
-        populateDateField(alarmMgr.timeOfArrival[index]!);
+        populateDateField(alarmMgr.timeOfArrival[index]);
     }
     
     func printTotalAlarms() -> Void{

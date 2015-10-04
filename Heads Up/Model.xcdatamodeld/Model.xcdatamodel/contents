@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="LogItem" representedClassName="LogItem" syncable="YES">
+        <attribute name="alarm_scheduler" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="avoidTolls" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bufferTime" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="destination" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeCalculated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="timeOfArrival" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="total_delay_time" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="total_time_seconds" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="traffic_scheduler" optional="YES" attributeType="Transformable" syncable="YES"/>
     </entity>
     <elements>
-        <element name="LogItem" positionX="-45" positionY="0" width="128" height="60"/>
+        <element name="LogItem" positionX="-45" positionY="0" width="128" height="195"/>
     </elements>
 </model>

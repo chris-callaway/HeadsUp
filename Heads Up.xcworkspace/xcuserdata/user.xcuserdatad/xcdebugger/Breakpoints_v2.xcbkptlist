@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/DetailViewController.swift"
-            timestampString = "465178094.621726"
+            timestampString = "465268857.362423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "452"
-            endingLineNumber = "452"
+            startingLineNumber = "478"
+            endingLineNumber = "478"
             landmarkName = "saveTraffic(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -25,28 +25,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Heads Up/MasterViewController.swift"
-            timestampString = "465179098.025608"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "tableView(_:cellForRowAtIndexPath:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Heads Up/DetailViewController.swift"
-            timestampString = "465178094.621726"
+            timestampString = "465268857.362423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "525"
+            endingLineNumber = "525"
             landmarkName = "saveTraffic(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -64,22 +48,6 @@
             startingLineNumber = "39"
             endingLineNumber = "39"
             landmarkName = "mapButtonClicked(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Heads Up/MasterViewController.swift"
-            timestampString = "465086118.455579"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "locationManager(_:didUpdateLocations:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -136,11 +104,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/LogItem.swift"
-            timestampString = "465173920.0923"
+            timestampString = "465270154.834412"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "createInManagedObjectContext(_:alarm:indexPath:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -152,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/DetailViewController.swift"
-            timestampString = "465096159.72286"
+            timestampString = "465179522.278755"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "saveNewItem(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -164,27 +132,27 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/Alarm.swift"
-            timestampString = "465088626.988538"
+            timestampString = "465597686.791198"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "Alarm"
             landmarkType = "3">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Heads_Up.Alarm.name.getter : Swift.Array&lt;Swift.Optional&lt;Swift.String&gt;&gt;"
                   moduleName = "Heads Up"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/Alarm.swift"
-                  timestampString = "465178581.039801"
+                  timestampString = "465454516.958771"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -192,14 +160,14 @@
                   offsetFromSymbolStart = "24">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Heads_Up.Alarm.name.setter : Swift.Array&lt;Swift.Optional&lt;Swift.String&gt;&gt;"
                   moduleName = "Heads Up"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/Alarm.swift"
-                  timestampString = "465178581.039943"
+                  timestampString = "465454516.958964"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -207,14 +175,14 @@
                   offsetFromSymbolStart = "20">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Heads_Up.Alarm.name.materializeForSet : Swift.Array&lt;Swift.Optional&lt;Swift.String&gt;&gt;"
                   moduleName = "Heads Up"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/Alarm.swift"
-                  timestampString = "465178581.040079"
+                  timestampString = "465454516.95916"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -222,14 +190,14 @@
                   offsetFromSymbolStart = "20">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Heads_Up.Alarm.init (Heads_Up.Alarm.Type)() -&gt; Heads_Up.Alarm"
                   moduleName = "Heads Up"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/Alarm.swift"
-                  timestampString = "465178581.04021"
+                  timestampString = "465454516.959375"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "34"
@@ -272,17 +240,45 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heads Up/CustomTableViewCell.swift"
+            timestampString = "465597102.053291"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "10"
+            endingLineNumber = "10">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Heads Up/MasterViewController.swift"
-            timestampString = "465179098.025608"
+            filePath = "Heads Up/Alarm.swift"
+            timestampString = "465597320.742764"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
-            landmarkName = "tableView(_:commitEditingStyle:forRowAtIndexPath:)"
-            landmarkType = "5">
+            startingLineNumber = "11"
+            endingLineNumber = "11">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heads Up/DetailViewController.swift"
+            timestampString = "465604151.337534"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "582"
+            endingLineNumber = "582"
+            landmarkName = "DetailViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -292,12 +288,152 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Heads Up/MasterViewController.swift"
-            timestampString = "465179098.025608"
+            timestampString = "465609710.681797"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "296"
-            endingLineNumber = "296"
-            landmarkName = "tableView(_:commitEditingStyle:forRowAtIndexPath:)"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "MasterViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.latitude.getter : Swift.Float"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.695572"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.latitude.setter : Swift.Float"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.695787"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.latitude.materializeForSet : Swift.Float"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.695937"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.init (Heads_Up.MasterViewController.Type)(style : C.UITableViewStyle) -&gt; Heads_Up.MasterViewController"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.696137"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "420">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.init (Heads_Up.MasterViewController.Type)(nibName : Swift.ImplicitlyUnwrappedOptional&lt;Swift.String&gt;, bundle : Swift.ImplicitlyUnwrappedOptional&lt;ObjectiveC.NSBundle&gt;) -&gt; Swift.ImplicitlyUnwrappedOptional&lt;Heads_Up.MasterViewController&gt;"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.696278"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "460">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Heads_Up.MasterViewController.init (Heads_Up.MasterViewController.Type)(coder : Swift.ImplicitlyUnwrappedOptional&lt;ObjectiveC.NSCoder&gt;) -&gt; Swift.ImplicitlyUnwrappedOptional&lt;Heads_Up.MasterViewController&gt;"
+                  moduleName = "Heads Up"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/user/Desktop/Freelance/Transcendence%20Productions/iOS%20Apps/Swift/Heads%20Up%20copy/Heads%20Up/MasterViewController.swift"
+                  timestampString = "465606306.696419"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "420">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heads Up/MasterViewController.swift"
+            timestampString = "465609710.681797"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "MasterViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heads Up/Alarm.swift"
+            timestampString = "465607981.906437"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
+            landmarkName = "saveAlarms(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Heads Up/Alarm.swift"
+            timestampString = "465608126.002758"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
+            landmarkName = "saveAlarms(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

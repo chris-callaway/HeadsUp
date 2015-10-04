@@ -56,7 +56,7 @@
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDN-fl-9nB">
                                             <rect key="frame" x="510" y="48" width="51" height="31"/>
                                             <connections>
-                                                <action selector="alarmSwitchChanged:" destination="m0d-ak-lc9" eventType="touchUpInside" id="omS-Oz-Fnc"/>
+                                                <action selector="alarmSwitchChanged:" destination="m0d-ak-lc9" eventType="touchUpInside" id="XgA-Ks-dfv"/>
                                             </connections>
                                         </switch>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vox-Cg-4W5">
@@ -84,7 +84,7 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
-                                    <outlet property="alarmSwitch" destination="zDN-fl-9nB" id="CqU-7n-fVq"/>
+                                    <outlet property="alarmSwitch" destination="zDN-fl-9nB" id="lyV-P7-TQr"/>
                                     <segue destination="Ah7-4n-0Wa" kind="show" identifier="showDetail" id="jUr-3t-vfg"/>
                                 </connections>
                             </tableViewCell>
@@ -132,6 +132,7 @@
                                 </state>
                                 <connections>
                                     <action selector="mapButtonClicked:" destination="Ah7-4n-0Wa" eventType="touchUpInside" id="dy7-2D-Cfs"/>
+                                    <segue destination="pBS-SW-Ubk" kind="show" identifier="mapView" id="p6H-PH-LDa"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xZd-yX-WWl">
@@ -306,7 +307,7 @@
                         <viewControllerLayoutGuide type="bottom" id="9Es-2K-Njj"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="cWV-QA-K91">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dPD-Co-z4D">
