@@ -22,36 +22,34 @@ class CustomTableViewCell: UITableViewCell {
         
         let defaults = NSUserDefaults.standardUserDefaults()
         
-//        var btnPos: CGPoint = sender.convertPoint(CGPointZero, toView: sender.tableView)
-//        //var indexPath: NSIndexPath = sender.tableView.indexPathForRowAtPoint(btnPos)!
-//        println(btnPos);
+        var position: CGPoint = sender.convertPoint(CGPointZero, toView: MasterViewController().tableView)
+//        if let indexPath = MasterViewController().tableView.indexPathForRowAtPoint(position)
+//        {
+//            let section = indexPath.section
+//            let row = indexPath.row
+//            println(row);
+//        }
         
-//        var view = sender.superview
-//        let pointInTable: CGPoint = sender.convertPoint(sender.bounds.origin, toView: self.superview)
-//        let cellIndexPath = view.indexPathForRowAtPoint(pointInTable)
-//    
-//        
-//        //var view = sender.superview
-//        var table: UITableView = cell.superview as! UITableView
-//        let textFieldIndexPath = table.indexPathForCell(cell)
-//        
-//        println(textFieldIndexPath);
         if (alarmSwitch.on){
+            
+            // run timer or invalidate
+            
             //var text = alarmMgr.time[0];
             
             // save avoid tolls
-            let avoidTolls = NSKeyedArchiver.archivedDataWithRootObject(alarmMgr.avoidTolls)
-            println("avoidTolls saved as \(alarmMgr.avoidTolls)");
-            defaults.setObject("ON", forKey: "avoidTolls")
+            //alarmMgr.avoidTolls[0] = "true";
+//            let avoidTolls = NSKeyedArchiver.archivedDataWithRootObject(alarmMgr.avoidTolls)
+//            println("avoidTolls saved as \(alarmMgr.avoidTolls)");
+//            defaults.setObject("ON", forKey: "avoidTolls")
             
             println("ON");
             //            alarmMgr.alarm_scheduler[0]!.invalidate()
             //            alarmMgr.traffic_scheduler[0]!.invalidate()
         } else{
             // save avoid tolls
-            let avoidTolls = NSKeyedArchiver.archivedDataWithRootObject(alarmMgr.avoidTolls)
-            println("avoidTolls saved as \(alarmMgr.avoidTolls)");
-            defaults.setObject("OFF", forKey: "avoidTolls")
+//            let avoidTolls = NSKeyedArchiver.archivedDataWithRootObject(alarmMgr.avoidTolls)
+//            println("avoidTolls saved as \(alarmMgr.avoidTolls)");
+//            defaults.setObject("OFF", forKey: "avoidTolls")
             println("OFF");
         }
 
@@ -332,6 +330,7 @@ class MasterViewController: UITableViewController, CLLocationManagerDelegate {
 //
 //        }
         
+    
         // clock label
         if let label = cell.viewWithTag(100) as? UILabel {
             var dateFormatter = NSDateFormatter();

@@ -45,6 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        alarmMgr.saveAlarms(alarmMgr)
+        MasterViewController().syncData()
     }
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
